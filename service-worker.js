@@ -23,13 +23,14 @@ self.addEventListener("install", function (event) {
   if (doCache) {
     event.waitUntil(
       caches.open(CACHE_NAME).then(function (cache) {
-        fetch(`${self.registration.scope}/asset-manifest.json`)
+        fetch(`${self.registration.scope}asset-manifest.json`)
           .then((response) => response.json())
           .then((assets) => {
             console.log(self)
-            console.log(`${self.registration.scope}/asset-manifest.json`)
+            console.log(`${self.registration.scope}asset-manifest.json`)
             const urlsToCache = ["/"].concat(Object.values(assets.files));
-
+            
+            console.log(urlsToCache)
             cache.addAll(urlsToCache);
 
             console.log("cached");
