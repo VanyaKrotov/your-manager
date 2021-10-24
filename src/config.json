@@ -1,0 +1,8 @@
+{
+    "db": {
+        "name": "application_db",
+        "version": "1.0",
+        "displayName": "application_db",
+        "size": 67108864
+    }
+}
