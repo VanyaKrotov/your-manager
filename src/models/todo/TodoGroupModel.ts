@@ -4,9 +4,11 @@ import { TodoGroup } from "../../types/todo-list";
 import TodoItemModel from "./TodoIteModel";
 
 class TodoGroupModel {
+  private static MODEL_NAME = "todo_group_model";
+
   public static init() {
     return sqlQuery(
-      `CREATE TABLE ${TodoGroupModel.name} (
+      `CREATE TABLE ${this.MODEL_NAME} (
           id INTEGER PRIMARY KEY, 
           title TEXT,
           orderIndex INTEGER,
@@ -17,7 +19,7 @@ class TodoGroupModel {
 
   public static async getById(groupId: number) {
     const { result } = await sqlQuery(
-      `SELECT * FROM ${TodoGroupModel.name} WHERE id = ?`,
+      `SELECT * FROM ${this.MODEL_NAME} WHERE id = ?`,
       [groupId]
     );
 
@@ -34,7 +36,7 @@ class TodoGroupModel {
     userId,
   }: Partial<Omit<TodoGroup, "id">>) {
     const { result } = await sqlQuery(
-      `INSERT INTO ${TodoGroupModel.name} (title, orderIndex, userId) values(?, ?, ?)`,
+      `INSERT INTO ${this.MODEL_NAME} (title, orderIndex, userId) values(?, ?, ?)`,
       [title, orderIndex, userId]
     );
 
@@ -47,7 +49,7 @@ class TodoGroupModel {
 
   public static async selectAllForUserId(userId: number): Promise<TodoGroup[]> {
     const { result } = await sqlQuery(
-      `SELECT * FROM ${TodoGroupModel.name} WHERE userId = ?`,
+      `SELECT * FROM ${this.MODEL_NAME} WHERE userId = ?`,
       [userId]
     );
 
@@ -56,7 +58,7 @@ class TodoGroupModel {
 
   public static async removeById(groupId: number): Promise<boolean> {
     const { result } = await sqlQuery(
-      `DELETE FROM ${TodoGroupModel.name} WHERE id = ?`,
+      `DELETE FROM ${this.MODEL_NAME} WHERE id = ?`,
       [groupId]
     );
 

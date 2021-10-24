@@ -3,9 +3,11 @@ import { mapSqlResultToArray } from "../../helpers/mappers";
 import { TodoItem } from "../../types/todo-list";
 
 class TodoItemModel {
+  private static MODEL_NAME = "todo_item_model";
+
   public static init() {
     return sqlQuery(
-      `CREATE TABLE ${TodoItemModel.name} (
+      `CREATE TABLE ${this.MODEL_NAME} (
           id INTEGER PRIMARY KEY, 
           title TEXT, 
           description TEXT, 
@@ -33,7 +35,7 @@ class TodoItemModel {
     orderIndex,
   }: Omit<TodoItem, "id" | "lastChanged" | "dateCreate" | "priority">) {
     const { result } = await sqlQuery(
-      `INSERT INTO ${TodoItemModel.name} (title, description, state, type, groupId, userId, orderIndex, steps, dateCreate, priority) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO ${this.MODEL_NAME} (title, description, state, type, groupId, userId, orderIndex, steps, dateCreate, priority) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         title,
         description,
@@ -57,7 +59,7 @@ class TodoItemModel {
 
   public static async selectById(itemId: number) {
     const { result } = await sqlQuery(
-      `SELECT * FROM ${TodoItemModel.name} WHERE id = ?`,
+      `SELECT * FROM ${this.MODEL_NAME} WHERE id = ?`,
       [itemId]
     );
 
@@ -72,7 +74,7 @@ class TodoItemModel {
 
   public static async selectAllForUserId(userId: number): Promise<TodoItem[]> {
     const { result } = await sqlQuery(
-      `SELECT * FROM ${TodoItemModel.name} WHERE userId = ?`,
+      `SELECT * FROM ${this.MODEL_NAME} WHERE userId = ?`,
       [userId]
     );
 
@@ -98,7 +100,7 @@ class TodoItemModel {
     priority,
   }: TodoItem) {
     const { result } = await sqlQuery(
-      `UPDATE ${TodoItemModel.name} SET title = ?, description = ?, state = ?, type = ?, groupId = ?, userId = ?, orderIndex = ?, steps = ?, priority = ?, lastChanged = ? WHERE id = ?`,
+      `UPDATE ${this.MODEL_NAME} SET title = ?, description = ?, state = ?, type = ?, groupId = ?, userId = ?, orderIndex = ?, steps = ?, priority = ?, lastChanged = ? WHERE id = ?`,
       [
         title,
         description,
@@ -122,7 +124,7 @@ class TodoItemModel {
   }
 
   public static async removeByGroupId(groupId: number): Promise<boolean> {
-    await sqlQuery(`DELETE FROM ${TodoItemModel.name} WHERE groupId = ?`, [
+    await sqlQuery(`DELETE FROM ${this.MODEL_NAME} WHERE groupId = ?`, [
       groupId,
     ]);
 
@@ -131,7 +133,7 @@ class TodoItemModel {
 
   public static async removeById(id: number) {
     const { result } = await sqlQuery(
-      `DELETE FROM ${TodoItemModel.name} WHERE id = ?`,
+      `DELETE FROM ${this.MODEL_NAME} WHERE id = ?`,
       [id]
     );
 

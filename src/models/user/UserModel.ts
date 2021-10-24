@@ -4,9 +4,11 @@ import { SQLQueryResult } from "../../types/database";
 import { User, UserFull } from "../../types/user";
 
 class UserModel {
+  private static MODEL_NAME = "user";
+
   public static init(): Promise<SQLQueryResult> {
     return sqlQuery(
-      `CREATE TABLE ${UserModel.name} (id INTEGER PRIMARY KEY, username TEXT, settings TEXT, password TEXT, privateKey TEXT, lastLogin REAL)`
+      `CREATE TABLE ${this.MODEL_NAME} (id INTEGER PRIMARY KEY, username TEXT, settings TEXT, password TEXT, privateKey TEXT, lastLogin REAL)`
     );
   }
 
@@ -17,7 +19,7 @@ class UserModel {
     settings = "{}",
   }: Partial<Omit<UserFull, "id">>) {
     return sqlQuery(
-      `INSERT INTO ${UserModel.name} (username, settings, password, privateKey) values(?, ?, ?, ?)`,
+      `INSERT INTO ${this.MODEL_NAME} (username, settings, password, privateKey) values(?, ?, ?, ?)`,
       [username, settings, password, privateKey]
     );
   }
@@ -25,7 +27,7 @@ class UserModel {
   public static async selectUserById(userId: number): Promise<User> {
     const { result } = await sqlQuery(
       "SELECT id, username, settings, lastLogin FROM ? WHERE id = ?",
-      [UserModel.name, userId]
+      [this.MODEL_NAME, userId]
     );
 
     return result.rows.item(0);
