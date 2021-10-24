@@ -28,7 +28,7 @@ self.addEventListener("install", function (event) {
           .then((assets) => {
             console.log(self)
             console.log(`${self.registration.scope}asset-manifest.json`)
-            const urlsToCache = ["/"].concat(Object.values(assets.files));
+            const urlsToCache = Object.values(assets.files);
             
             console.log(urlsToCache)
             cache.addAll(urlsToCache);
