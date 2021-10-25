@@ -68,7 +68,7 @@ const TodoListContent: FC<TodoListContentProps> = ({
     };
   }, [itemsMapForGroups, group]);
 
-  const onRemoveSelected = useCallback(
+  const onCloseRightSide = useCallback(
     () => setSelectedId(null),
     [setSelectedId]
   );
@@ -105,8 +105,9 @@ const TodoListContent: FC<TodoListContentProps> = ({
   const onRemoveItem = useCallback((_target, _data, context) => {
     const id = Number(context.parentElement?.dataset?.uid);
 
+    onCloseRightSide();
     todoList.removeItem(id);
-  }, []);
+  }, [onCloseRightSide]);
 
   const onChangeItemsFilter = useCallback(
     (value) => () => changeFilter({ filter: value }),
@@ -233,7 +234,7 @@ const TodoListContent: FC<TodoListContentProps> = ({
           <FlexboxGrid.Item colspan={right}>
             <RightSide
               selectedId={selectedId}
-              onClose={onRemoveSelected}
+              onClose={onCloseRightSide}
               onChangeState={onChangeState}
             />
           </FlexboxGrid.Item>
