@@ -21,7 +21,7 @@ const Container = styled.span`
   }
 
   .empty {
-    display: inline-flex;
+    display: flex;
   }
 
   &:hover .empty {
@@ -29,16 +29,17 @@ const Container = styled.span`
   }
 
   &:hover .success {
-    display: inline-block;
+    display: flex;
   }
 
   &[data-done="true"] {
-    .empty, .success {
+    .empty,
+    .success {
       display: none;
     }
 
     .filled-success {
-      display: inline-flex;
+      display: flex;
     }
   }
 `;

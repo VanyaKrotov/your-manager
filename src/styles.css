@@ -8,6 +8,7 @@ html,
 /* TODO */
 body {
   overflow: hidden;
+  border-top: var(--rs-divider-border);
 }
 
 .react-contextmenu {

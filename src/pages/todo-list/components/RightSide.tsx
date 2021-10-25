@@ -42,7 +42,6 @@ const TitleContainer = styled.div`
 
   & span {
     cursor: pointer;
-    display: inline-block;
   }
 `;
 
@@ -151,7 +150,7 @@ const RightSide: FC<RightSideProps> = ({
       <ScrollContainer>
         <TitleContainer>
           <span
-            className="hover-icon"
+            className="hover-icon flex-block"
             onClick={() =>
               onChangeState(
                 selectedId,
@@ -165,7 +164,7 @@ const RightSide: FC<RightSideProps> = ({
             <EditableTitle onSave={onUpdateTitle}>{title}</EditableTitle>
           </h4>
           <span
-            className="hover-icon"
+            className="hover-icon flex-block"
             onClick={() =>
               todoList.updateItem(selectedId, { priority: !priority })
             }
