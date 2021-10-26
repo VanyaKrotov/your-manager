@@ -197,7 +197,7 @@ const RightSide: FC<RightSideProps> = ({
                     className="hover-icon centered-span"
                     onClick={() => onRemoveStep(id)}
                   >
-                    <CloseIcon />
+                    <CloseIcon className="icon-14" />
                   </span>
                 }
               >

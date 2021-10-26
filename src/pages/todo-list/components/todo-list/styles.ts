@@ -13,14 +13,22 @@ export const TodoListElement = styled(List)`
   &[data-hasAdded="true"] {
     height: calc(100% - 56px);
   }
+
+  /* background-image: url('data:image/svg+xml,<svg viewBox="0 0 1000 40" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="0" x2="1000" y2="0" stroke="currentColor" /></svg>'); */
 `;
 
 const LIST_ITEM_STYLE = css`
-  border-radius: 5px;
+  border-radius: 4px;
   background: var(--rs-gray-800);
 
+  & svg {
+    display: flex;
+    height: 16px;
+    width: auto;
+  }
+
   &:hover {
-    background: var(--rs-gray-700);
+    background: var(--rs-gray-800);
   }
 `;
 
@@ -31,29 +39,20 @@ export const ListItem = styled(List.Item)`
   padding: 0px;
 
   & > div {
-    padding: 14px;
+    padding: 10px 14px;
   }
 
   &:not(:last-child) {
     margin-bottom: 5px;
   }
 
-  & svg {
-    display: flex;
-    height: 20px;
-    width: auto;
-  }
-
   & > div .content {
-    /* margin: 0px 10px 0px 15px; */
-    font-size: 16px;
-    /* flex: auto; */
-    /* max-width: 90%; */
+    font-size: 15px;
     word-break: break-all;
   }
 
   &[data-active="true"] {
-    background: var(--rs-gray-600);
+    background: var(--rs-gray-800);
     color: var(--rs-primary-700);
     font-weight: bold;
   }
@@ -64,11 +63,6 @@ export const AddItemContainer = styled.div`
   margin-top: 8px;
   cursor: text;
   padding: 10px 14px;
-
-  & svg {
-    height: 20px;
-    width: auto;
-  }
 
   & > div > div:last-child {
     flex: auto;

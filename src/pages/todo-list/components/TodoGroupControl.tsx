@@ -22,11 +22,11 @@ const NavContainer = styled.div`
 `;
 
 const ListTasksContainer = styled.div`
-  height: calc(100vh - 176px);
+  height: calc(100vh - 145px);
 `;
 
 const TopListTasksContainer = styled.div`
-  height: 170px;
+  height: 145px;
 `;
 
 const StyledTodoList = styled(TodoList)`

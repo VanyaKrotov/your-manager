@@ -17,6 +17,8 @@ const Container = styled.span`
   display: flex;
 
   & > svg {
+    min-height: 20px;
+    width: auto;
     display: none;
   }
 

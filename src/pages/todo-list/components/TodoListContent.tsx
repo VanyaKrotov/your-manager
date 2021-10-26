@@ -11,6 +11,7 @@ import {
   IconButton,
 } from "rsuite";
 import styled from "styled-components";
+// import Picker from "emoji-picker-react";
 import { ItemsFilter, TodoListFilter } from "../types";
 import RightSide from "./RightSide";
 
@@ -39,7 +40,7 @@ const ListContainer = styled.div`
 `;
 
 const StepsState = styled.div`
-  font-size: 13px;
+  font-size: 10px;
   color: var(--rs-gray-200);
 `;
 
@@ -102,12 +103,15 @@ const TodoListContent: FC<TodoListContentProps> = ({
     todoList.updateItem(todoId, { state: newState });
   }, []);
 
-  const onRemoveItem = useCallback((_target, _data, context) => {
-    const id = Number(context.parentElement?.dataset?.uid);
+  const onRemoveItem = useCallback(
+    (_target, _data, context) => {
+      const id = Number(context.parentElement?.dataset?.uid);
 
-    onCloseRightSide();
-    todoList.removeItem(id);
-  }, [onCloseRightSide]);
+      onCloseRightSide();
+      todoList.removeItem(id);
+    },
+    [onCloseRightSide]
+  );
 
   const onChangeItemsFilter = useCallback(
     (value) => () => changeFilter({ filter: value }),
@@ -137,18 +141,21 @@ const TodoListContent: FC<TodoListContentProps> = ({
                     <Button
                       active={filter === ItemsFilter.All}
                       onClick={onChangeItemsFilter(ItemsFilter.All)}
+                      appearance="subtle"
                     >
                       All ({itemsMap[ItemsFilter.All].length})
                     </Button>
                     <Button
                       active={filter === ItemsFilter.Done}
                       onClick={onChangeItemsFilter(ItemsFilter.Done)}
+                      appearance="subtle"
                     >
                       Done ({itemsMap[ItemsFilter.Done].length})
                     </Button>
                     <Button
                       active={filter === ItemsFilter.InProgress}
                       onClick={onChangeItemsFilter(ItemsFilter.InProgress)}
+                      appearance="subtle"
                     >
                       In progress ({itemsMap[ItemsFilter.InProgress].length})
                     </Button>
