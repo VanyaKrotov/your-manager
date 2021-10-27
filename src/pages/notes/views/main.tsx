@@ -13,7 +13,7 @@ const Notes = () => {
     if (notes.items.length) {
       changeFilter({ active: notes.items[0].id });
     }
-  }, [changeFilter]);
+  }, []);
 
   return (
     <PageContent

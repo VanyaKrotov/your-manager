@@ -21,6 +21,8 @@ class NotesStore {
     if (addedNote) {
       this.items.push(addedNote);
     }
+
+    return addedNote;
   }
 
   public async updateNote(

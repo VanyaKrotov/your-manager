@@ -16,7 +16,11 @@ const NotesNavigation: FC<NotesNavigationProps> = ({
   filter: { active },
 }) => {
   const onAddNote = useCallback((title: string) => {
-    notes.addNote({ title, userId: user.userId });
+    notes.addNote({ title, userId: user.userId }).then((addedNote) => {
+      if (addedNote) {
+        changeFilter({ active: addedNote.id });
+      }
+    });
 
     return true;
   }, []);
