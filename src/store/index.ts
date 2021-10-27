@@ -8,7 +8,7 @@ import UserModel from "../models/user/UserModel";
 
 export const pageView = new PageViewStore();
 export const user = new UserStore();
-export const notes = new NotesStore();
+export const notes = new NotesStore(pageView.currentUserId);
 export const passwords = new PasswordStore();
 export const todoList = new TodoListStore(pageView.currentUserId);
 

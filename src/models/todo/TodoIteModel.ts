@@ -3,7 +3,7 @@ import { mapSqlResultToArray } from "../../helpers/mappers";
 import { TodoItem } from "../../types/todo-list";
 
 class TodoItemModel {
-  private static MODEL_NAME = "todo_item_model";
+  public static MODEL_NAME = "todo_item_model";
 
   public static init() {
     return sqlQuery(

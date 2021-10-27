@@ -3,8 +3,8 @@ import styled from "styled-components";
 import EditableTitle from "../../../components/editable-title";
 import Star from "../../../icons/Star";
 import { todoList } from "../../../store";
-import TodoIcon from "./todo-list/TodoIcon";
-import { TodoList, TodoListItem } from "./todo-list";
+import TodoIcon from "../../../components/todo-list/ItemIcon";
+import { List, ListItem } from "../../../components/todo-list";
 import { TodoState } from "../../../types/todo-list";
 import CloseIcon from "@rsuite/icons/Close";
 import { FlexboxGrid, IconButton } from "rsuite";
@@ -174,9 +174,9 @@ const RightSide: FC<RightSideProps> = ({
         </TitleContainer>
 
         <ListContainer>
-          <TodoList addPlaceholder="Add step" onAddItem={onAddStep}>
+          <List addPlaceholder="Add step" onAddItem={onAddStep}>
             {steps.map(({ id, title, state }) => (
-              <TodoListItem
+              <ListItem
                 key={id}
                 icon={
                   <span
@@ -204,9 +204,9 @@ const RightSide: FC<RightSideProps> = ({
                 <EditableTitle onSave={onEditStepTitle(id)}>
                   {title}
                 </EditableTitle>
-              </TodoListItem>
+              </ListItem>
             ))}
-          </TodoList>
+          </List>
         </ListContainer>
 
         <DescriptionTextarea

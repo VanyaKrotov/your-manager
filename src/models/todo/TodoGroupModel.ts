@@ -4,7 +4,7 @@ import { TodoGroup } from "../../types/todo-list";
 import TodoItemModel from "./TodoIteModel";
 
 class TodoGroupModel {
-  private static MODEL_NAME = "todo_group_model";
+  public static MODEL_NAME = "todo_group_model";
 
   public static init() {
     return sqlQuery(

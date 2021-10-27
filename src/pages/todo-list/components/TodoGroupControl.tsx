@@ -12,7 +12,10 @@ import { todoList, user } from "../../../store";
 import { TodoDefaultListGroup } from "../../../enums/todo-list";
 import Star from "../../../icons/Star";
 
-import { TodoList, TodoListItem } from "./todo-list";
+import {
+  List as TodoList,
+  ListItem as TodoListItem,
+} from "../../../components/todo-list";
 import { ContextMenu, MenuItem } from "react-contextmenu";
 
 const NavContainer = styled.div`

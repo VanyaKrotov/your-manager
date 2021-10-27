@@ -15,14 +15,14 @@ if (db === null) {
 const sqlQuery = createQueryHandler(db);
 
 const modelInitRunner = async (model: {
-  name: string;
+  MODEL_NAME: string;
   init: () => Promise<SQLQueryResult>;
 }) => {
   const {
     result: { rows },
   } = await sqlQuery(
     `SELECT * FROM sqlite_master WHERE type='table' AND name=?`,
-    [model.name]
+    [model.MODEL_NAME]
   );
 
   if (!rows.length) {

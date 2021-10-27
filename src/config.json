@@ -1,8 +1,9 @@
 {
-    "db": {
-        "name": "application_db",
-        "version": "1.0",
-        "displayName": "application_db",
-        "size": 67108864
-    }
+  "db": {
+    "name": "application_db",
+    "version": "1.0",
+    "displayName": "application_db",
+    "size": 67108864
+  },
+  "tinyApiKey": "h2ps8ccvj3t4e98qpki5xmwr5t231obaasu695wqqic4wyy7"
 }

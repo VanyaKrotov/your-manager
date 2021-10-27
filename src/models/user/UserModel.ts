@@ -4,7 +4,7 @@ import { SQLQueryResult } from "../../types/database";
 import { User, UserFull } from "../../types/user";
 
 class UserModel {
-  private static MODEL_NAME = "user";
+  public static MODEL_NAME = "user";
 
   public static init(): Promise<SQLQueryResult> {
     return sqlQuery(

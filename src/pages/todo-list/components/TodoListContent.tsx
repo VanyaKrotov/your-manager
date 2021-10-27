@@ -16,8 +16,11 @@ import { ItemsFilter, TodoListFilter } from "../types";
 import RightSide from "./RightSide";
 
 import MoreIcon from "@rsuite/icons/More";
-import { TodoList, TodoListItem } from "./todo-list";
-import TodoIcon from "./todo-list/TodoIcon";
+import {
+  List as TodoList,
+  ListItem as TodoListItem,
+} from "../../../components/todo-list";
+import TodoIcon from "../../../components/todo-list/ItemIcon";
 import { TodoState } from "../../../types/todo-list";
 import Star from "../../../icons/Star";
 import { pageView, todoList } from "../../../store";
