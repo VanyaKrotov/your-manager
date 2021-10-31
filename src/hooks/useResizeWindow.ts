@@ -2,14 +2,14 @@ import { useCallback, useEffect, useState } from "react";
 
 const useResizeWindow = () => {
   const [size, setSize] = useState({
-    height: window.screen.height,
-    width: window.screen.width,
+    height: window.innerHeight,
+    width: window.innerWidth,
   });
 
   const onResize = useCallback(() => {
-    const { width, height } = window.screen;
+    const { innerHeight, innerWidth } = window;
 
-    setSize({ height, width });
+    setSize({ height: innerHeight, width: innerWidth });
   }, []);
 
   useEffect(() => {

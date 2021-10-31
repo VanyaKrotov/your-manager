@@ -6,4 +6,5 @@ export const routes = {
   NOTES: "/notes",
   PASSWORDS: "/passwords",
   SETTINGS: "/settings",
+  CHANGE_USER: '/change-user'
 };

@@ -5,12 +5,9 @@ import {
   ButtonGroup,
   ButtonToolbar,
   Container,
-  Content,
-  Dropdown,
   FlexboxGrid,
   IconButton,
 } from "rsuite";
-import styled from "styled-components";
 // import Picker from "emoji-picker-react";
 import { ItemsFilter, TodoListFilter } from "../types";
 import RightSide from "./RightSide";
@@ -19,33 +16,18 @@ import MoreIcon from "@rsuite/icons/More";
 import {
   List as TodoList,
   ListItem as TodoListItem,
-} from "../../../components/todo-list";
-import TodoIcon from "../../../components/todo-list/ItemIcon";
+} from "../../../components/list";
+import TodoIcon from "../../../components/list/ItemIcon";
 import { TodoState } from "../../../types/todo-list";
 import Star from "../../../icons/Star";
-import { pageView, todoList } from "../../../store";
-import { ContextMenu, MenuItem } from "react-contextmenu";
 import { ChangeTodoFilterHandler } from "../utils/useTodoListFilter";
+import ContextMenu from "../../../components/context-menu";
+import { pageView, todoList } from "../../../store";
 
-const StyledContent = styled(Content)`
-  height: 100vh;
-  padding: 20px 30px;
-`;
-
-const Title = styled.h3`
-  color: var(--rs-sidenav-subtle-selected-text);
-`;
-
-const ListContainer = styled.div`
-  border-radius: 20px;
-  margin-top: 20px;
-  height: calc(100vh - 100px);
-`;
-
-const StepsState = styled.div`
-  font-size: 10px;
-  color: var(--rs-gray-200);
-`;
+import { StyledContent, Title, ListContainer, StepsState } from "./styles";
+import { useTranslation } from "react-i18next";
+import { TodoDefaultListGroup } from "../../../enums/todo-list";
+import EditableTitle from "../../../components/editable-title";
 
 interface TodoListContentProps {
   filter: TodoListFilter;
@@ -58,7 +40,8 @@ const TodoListContent: FC<TodoListContentProps> = ({
 }) => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
-  const { itemsMapForGroups } = todoList;
+  const { itemsMapForGroups, groups } = todoList;
+  const { t } = useTranslation();
 
   const itemsMap = useMemo(() => {
     const items = itemsMapForGroups[group] || [];
@@ -107,11 +90,9 @@ const TodoListContent: FC<TodoListContentProps> = ({
   }, []);
 
   const onRemoveItem = useCallback(
-    (_target, _data, context) => {
-      const id = Number(context.parentElement?.dataset?.uid);
-
+    (key) => {
       onCloseRightSide();
-      todoList.removeItem(id);
+      todoList.removeItem(Number(key));
     },
     [onCloseRightSide]
   );
@@ -121,22 +102,52 @@ const TodoListContent: FC<TodoListContentProps> = ({
     [changeFilter]
   );
 
+  const contextMenuItems = useMemo(
+    () => [
+      {
+        label: t("Delete task"),
+        handler: onRemoveItem,
+        className: "delete-button",
+      },
+    ],
+    [onRemoveItem, t]
+  );
+
+  const onSaveTitle = useCallback((title) => console.log(title), []);
+
+  const currentGroup = useMemo(
+    () => groups.find(({ id }) => id === group),
+    [group, groups]
+  );
+
+  const title = useMemo<string>(() => {
+    switch (group) {
+      case TodoDefaultListGroup.All:
+        return t("All");
+      case TodoDefaultListGroup.Priority:
+        return t("Priority");
+      case TodoDefaultListGroup.Today:
+        return t("Today");
+
+      default:
+        return currentGroup?.title || "";
+    }
+  }, [currentGroup, group, t]);
+
   return (
     <Container>
-      <ContextMenu id="same_unique_identifier" style={{ zIndex: 10 }}>
-        <Dropdown.Menu>
-          <MenuItem onClick={onRemoveItem}>
-            <Dropdown.Item className="delete-button">Delete</Dropdown.Item>
-          </MenuItem>
-        </Dropdown.Menu>
-      </ContextMenu>
+      <ContextMenu items={contextMenuItems} id="todo-list-context" />
 
       <FlexboxGrid>
         <FlexboxGrid.Item colspan={center}>
           <StyledContent>
             <FlexboxGrid align="middle" justify="space-between">
               <FlexboxGrid.Item>
-                <Title>title</Title>
+                <Title>
+                  <EditableTitle onSave={onSaveTitle} readOnly={group < 0}>
+                    {title}
+                  </EditableTitle>
+                </Title>
               </FlexboxGrid.Item>
               <FlexboxGrid.Item>
                 <ButtonToolbar>
@@ -146,21 +157,22 @@ const TodoListContent: FC<TodoListContentProps> = ({
                       onClick={onChangeItemsFilter(ItemsFilter.All)}
                       appearance="subtle"
                     >
-                      All ({itemsMap[ItemsFilter.All].length})
+                      {t("All")} ({itemsMap[ItemsFilter.All].length})
                     </Button>
                     <Button
                       active={filter === ItemsFilter.Done}
                       onClick={onChangeItemsFilter(ItemsFilter.Done)}
                       appearance="subtle"
                     >
-                      Done ({itemsMap[ItemsFilter.Done].length})
+                      {t("Done")} ({itemsMap[ItemsFilter.Done].length})
                     </Button>
                     <Button
                       active={filter === ItemsFilter.InProgress}
                       onClick={onChangeItemsFilter(ItemsFilter.InProgress)}
                       appearance="subtle"
                     >
-                      In progress ({itemsMap[ItemsFilter.InProgress].length})
+                      {t("In progress")} (
+                      {itemsMap[ItemsFilter.InProgress].length})
                     </Button>
                   </ButtonGroup>
 
@@ -170,7 +182,12 @@ const TodoListContent: FC<TodoListContentProps> = ({
             </FlexboxGrid>
 
             <ListContainer>
-              <TodoList onAddItem={onAddItem}>
+              <TodoList
+                onAddItem={onAddItem}
+                empty={!itemsMap[filter].length}
+                emptyPlaceholder={`${t("No tasks in this group")} [+]`}
+                addPlaceholder={t("Add task")}
+              >
                 {itemsMap[filter].map(
                   ({ id, priority, title, state, steps }) => (
                     <TodoListItem
@@ -178,7 +195,7 @@ const TodoListContent: FC<TodoListContentProps> = ({
                       onClick={() => setSelectedId(id)}
                       key={id}
                       contextMenuUId={id}
-                      contextMenuId="same_unique_identifier"
+                      contextMenuId="todo-list-context"
                       icon={
                         <span
                           onClick={(event) => {
@@ -194,8 +211,8 @@ const TodoListContent: FC<TodoListContentProps> = ({
                           className="hover-icon centered-span"
                           title={
                             state === TodoState.InProgress
-                              ? "Mark as done"
-                              : "Move back to in progress"
+                              ? t("Mark as done")
+                              : t("Move back to in progress")
                           }
                         >
                           <TodoIcon state={state} hovered />
@@ -210,7 +227,7 @@ const TodoListContent: FC<TodoListContentProps> = ({
                               priority: !priority,
                             });
                           }}
-                          title="Mark as important"
+                          title={t("Mark as important")}
                           className="hover-icon centered-span"
                         >
                           <Star filled={priority} />

@@ -1,17 +1,14 @@
-import { FC } from "react";
+import { /* FC, */ useCallback, useMemo } from "react";
 import {
   Container,
   Nav,
-  Sidebar,
   Sidenav,
   CustomProvider,
   FlexboxGrid,
-  IconButton,
-  IconButtonProps,
-  Avatar,
+  // IconButtonProps,
   Dropdown,
 } from "rsuite";
-import styled from "styled-components";
+import { ruRU, enUS } from "rsuite/locales";
 import { observer } from "mobx-react-lite";
 import { Link, useLocation } from "react-router-dom";
 
@@ -19,79 +16,79 @@ import TaskIcon from "@rsuite/icons/Task";
 import ParagraphIcon from "@rsuite/icons/Paragraph";
 import LogoIcon from "@rsuite/icons/AppSelect";
 import CharacterLockIcon from "@rsuite/icons/CharacterLock";
-import ArrowLeftIcon from "@rsuite/icons/ArrowLeft";
-import ArrowRightIcon from "@rsuite/icons/ArrowRight";
+// import ArrowLeftIcon from "@rsuite/icons/ArrowLeft";
+// import ArrowRightIcon from "@rsuite/icons/ArrowRight";
+import UserInfoIcon from "@rsuite/icons/UserInfo";
+import SettingIcon from "@rsuite/icons/Setting";
+import UserChangeIcon from "@rsuite/icons/UserChange";
 
+import { routes } from "./helpers/router";
 import Routes from "./pages";
 import { pageView, user } from "./store";
-import { routes } from "./helpers/router";
+
+import {
+  LogoContainer,
+  LogoTitle,
+  StyledSidebar,
+  // TogglerButton,
+  UserAvatar,
+  UserTitle,
+} from "./appStyles";
 
 import "rsuite/dist/rsuite.min.css";
 import "./styles.css";
+import Moon from "./icons/Moon";
+import Sun from "./icons/Sun";
+import LanguageIcon from "./icons/Language";
+import { Language, Theme } from "./enums/page-view";
 
-const LogoContainer = styled.div`
-  padding: 20px;
+import { useTranslation } from "react-i18next";
 
-  & svg {
-    width: 24px;
-    height: auto;
-  }
-
-  & svg[data-expanded="false"] {
-    width: 20px;
-  }
-`;
-
-const LogoTitle = styled.span`
-  font-size: 20px;
-  margin-left: 10px;
-  transition: display 1s linear;
-
-  &[data-expanded="false"] {
-    display: none;
-  }
-`;
-
-const StyledSidebar = styled(Sidebar)`
-  position: relative;
-  border-right: 1px solid var(--rs-divider-border);
-`;
-
-const TogglerButton = styled(IconButton)`
-  position: absolute;
-  right: -12px;
-  bottom: 80px;
-  z-index: 10;
-`;
-
-const UserAvatar = styled(Avatar)`
-  margin-right: 20px;
-  position: absolute;
-  left: 18px;
-  top: 15px;
-`;
-
-const ExpandedToggler: FC<IconButtonProps & { expanded: boolean }> = ({
-  expanded,
-  onClick,
-}) => (
-  <TogglerButton
-    icon={expanded ? <ArrowLeftIcon /> : <ArrowRightIcon />}
-    size="xs"
-    circle
-    onClick={onClick}
-    appearance="primary"
-  />
-);
+// const ExpandedToggler: FC<IconButtonProps & { expanded: boolean }> = ({
+//   expanded,
+//   onClick,
+// }) => (
+//   <TogglerButton
+//     icon={expanded ? <ArrowLeftIcon /> : <ArrowRightIcon />}
+//     size="xs"
+//     circle
+//     onClick={onClick}
+//     appearance="primary"
+//   />
+// );
 
 const App = () => {
   const { pathname } = useLocation();
+  const { language, theme } = pageView;
+  const { t } = useTranslation();
+
+  const onSelectOption = useCallback((key?: string) => {
+    console.log(key);
+
+    if (!key) {
+      return;
+    }
+
+    if ([Theme.Light, Theme.Dark].includes(key as Theme)) {
+      pageView.changeTheme(key as Theme);
+    }
+
+    if ([Language.Ru, Language.EnUS].includes(key as Language)) {
+      pageView.changeLanguage(key as Language);
+    }
+  }, []);
+
+  const locale = useMemo(
+    () => (language === Language.Ru ? ruRU : enUS),
+    [language]
+  );
 
   return (
-    <CustomProvider theme="dark">
+    <CustomProvider theme={theme} locale={locale}>
       <Container>
         <StyledSidebar
-          width={pageView.expandedSideBar ? 220 : 56}
+          // width={pageView.expandedSideBar ? 220 : 56}
+          width={56}
           collapsible
           className="flex-column"
         >
@@ -122,7 +119,7 @@ const App = () => {
                   as={Link}
                   to={routes.TODO_LIST}
                 >
-                  Todo
+                  {t("Todo")}
                 </Nav.Item>
 
                 <Nav.Item
@@ -131,7 +128,7 @@ const App = () => {
                   as={Link}
                   to={routes.NOTES}
                 >
-                  Notes
+                  {t("Notes")}
                 </Nav.Item>
 
                 <Nav.Item
@@ -140,43 +137,76 @@ const App = () => {
                   as={Link}
                   to={routes.PASSWORDS}
                 >
-                  Passwords
+                  {t("Passwords")}
                 </Nav.Item>
               </Nav>
               <Nav activeKey={pathname}>
                 <Dropdown
                   placement="rightEnd"
                   activeKey={pathname}
-                  title={user.username}
+                  onSelect={onSelectOption}
+                  title={<UserTitle>{user.username}</UserTitle>}
                   icon={
                     <UserAvatar size="xs">{user.usernameSymbols}</UserAvatar>
                   }
                 >
-                  <Dropdown.Item>Profile</Dropdown.Item>
+                  <Dropdown.Item icon={<UserInfoIcon />}>
+                    {t("Profile")}
+                  </Dropdown.Item>
                   <Dropdown.Item
                     eventKey={routes.SETTINGS}
                     as={Link}
                     to={routes.SETTINGS}
+                    icon={<SettingIcon />}
                   >
-                    Settings
+                    {t("Settings")}
                   </Dropdown.Item>
 
                   <Dropdown.Item divider />
 
-                  <Dropdown.Item
-                    eventKey={routes.SETTINGS}
-                    as={Link}
-                    to={routes.SETTINGS}
+                  <Dropdown.Menu
+                    title={t("Language")}
+                    icon={<LanguageIcon />}
+                    activeKey={language}
                   >
-                    Change user
+                    <Dropdown.Item eventKey={Language.Ru}>
+                      Русский
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey={Language.EnUS}>
+                      English
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+
+                  <Dropdown.Menu
+                    title={t("Theme")}
+                    icon={theme === Theme.Light ? <Sun /> : <Moon />}
+                    activeKey={theme}
+                  >
+                    <Dropdown.Item eventKey={Theme.Light}>
+                      {t("Light")}
+                    </Dropdown.Item>
+                    <Dropdown.Item eventKey={Theme.Dark}>
+                      {t("Dark")}
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+
+                  <Dropdown.Item divider />
+
+                  <Dropdown.Item
+                    eventKey={routes.CHANGE_USER}
+                    as={Link}
+                    to={routes.CHANGE_USER}
+                    icon={<UserChangeIcon />}
+                  >
+                    {t("Change user")}
                   </Dropdown.Item>
                 </Dropdown>
               </Nav>
             </Sidenav.Body>
-            <ExpandedToggler
+            {/* <ExpandedToggler
               expanded={pageView.expandedSideBar}
               onClick={pageView.toggleExpanded}
-            />
+            /> */}
           </Sidenav>
         </StyledSidebar>
 

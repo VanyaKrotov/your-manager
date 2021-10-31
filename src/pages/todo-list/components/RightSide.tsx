@@ -2,9 +2,9 @@ import { FC, useCallback, useMemo } from "react";
 import styled from "styled-components";
 import EditableTitle from "../../../components/editable-title";
 import Star from "../../../icons/Star";
-import { todoList } from "../../../store";
-import TodoIcon from "../../../components/todo-list/ItemIcon";
-import { List, ListItem } from "../../../components/todo-list";
+import { pageView, todoList } from "../../../store";
+import TodoIcon from "../../../components/list/ItemIcon";
+import { List, ListItem } from "../../../components/list";
 import { TodoState } from "../../../types/todo-list";
 import CloseIcon from "@rsuite/icons/Close";
 import { FlexboxGrid, IconButton } from "rsuite";
@@ -12,6 +12,7 @@ import ArrowRightIcon from "@rsuite/icons/ArrowRight";
 import TrashIcon from "@rsuite/icons/Trash";
 import { formatDistance } from "date-fns";
 import DescriptionTextarea from "./DescriptionTextarea";
+import { useTranslation } from "react-i18next";
 
 const Container = styled.div`
   height: 100vh;
@@ -70,6 +71,7 @@ const RightSide: FC<RightSideProps> = ({
 
   const { title, state, priority, steps, lastChanged, description } =
     currentItem!;
+  const { t } = useTranslation();
 
   const onUpdateTitle = useCallback(
     (title) => {
@@ -174,7 +176,7 @@ const RightSide: FC<RightSideProps> = ({
         </TitleContainer>
 
         <ListContainer>
-          <List addPlaceholder="Add step" onAddItem={onAddStep}>
+          <List addPlaceholder={t("Add step")} onAddItem={onAddStep}>
             {steps.map(({ id, title, state }) => (
               <ListItem
                 key={id}
@@ -183,8 +185,8 @@ const RightSide: FC<RightSideProps> = ({
                     className="hover-icon"
                     title={
                       state === TodoState.InProgress
-                        ? "Mark as done"
-                        : "Move back to in progress"
+                        ? t("Mark as done")
+                        : t("Move back to in progress")
                     }
                     onClick={onEditStepState(id)}
                   >
@@ -193,7 +195,7 @@ const RightSide: FC<RightSideProps> = ({
                 }
                 postfix={
                   <span
-                    title="Remove step"
+                    title={t("Remove step")}
                     className="hover-icon centered-span"
                     onClick={() => onRemoveStep(id)}
                   >
@@ -210,7 +212,7 @@ const RightSide: FC<RightSideProps> = ({
         </ListContainer>
 
         <DescriptionTextarea
-          placeholder="Add notes"
+          placeholder={t("Add notes")}
           onEdit={(description) =>
             todoList.updateItem(selectedId, { description })
           }
@@ -228,15 +230,16 @@ const RightSide: FC<RightSideProps> = ({
             icon={<ArrowRightIcon />}
             appearance="subtle"
             onClick={onClose}
-            title="Close frame"
+            title={t("Close frame")}
           />
         </FlexboxGrid.Item>
         <FlexboxGrid.Item className="align-center">
           {lastChanged
-            ? `last changed ${formatDistance(lastChanged!, new Date(), {
+            ? `${t("last changed")} ${formatDistance(lastChanged!, new Date(), {
                 includeSeconds: true,
-              })} ago`
-            : "Not updated"}
+                ...pageView.formatOptions,
+              })} ${t("ago")}`
+            : t("Not updated")}
         </FlexboxGrid.Item>
         <FlexboxGrid.Item>
           <IconButton
@@ -247,7 +250,7 @@ const RightSide: FC<RightSideProps> = ({
             className="delete-button"
             icon={<TrashIcon />}
             appearance="subtle"
-            title="Delete task"
+            title={t("Delete task")}
           />
         </FlexboxGrid.Item>
       </FlexboxGrid>

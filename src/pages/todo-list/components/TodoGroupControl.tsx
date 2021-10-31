@@ -1,7 +1,6 @@
-import { FC, useCallback } from "react";
-import { Divider, Dropdown } from "rsuite";
+import { FC, useCallback, useMemo } from "react";
+import { Divider } from "rsuite";
 import { observer } from "mobx-react";
-import styled from "styled-components";
 
 import TimeIcon from "@rsuite/icons/Time";
 import TrashIcon from "@rsuite/icons/Trash";
@@ -12,48 +11,16 @@ import { todoList, user } from "../../../store";
 import { TodoDefaultListGroup } from "../../../enums/todo-list";
 import Star from "../../../icons/Star";
 
+import ContextMenu from "../../../components/context-menu";
 import {
-  List as TodoList,
-  ListItem as TodoListItem,
-} from "../../../components/todo-list";
-import { ContextMenu, MenuItem } from "react-contextmenu";
-
-const NavContainer = styled.div`
-  height: 100vh;
-  width: 100%;
-  border-right: 1px solid var(--rs-divider-border);
-`;
-
-const ListTasksContainer = styled.div`
-  height: calc(100vh - 145px);
-`;
-
-const TopListTasksContainer = styled.div`
-  height: 145px;
-`;
-
-const StyledTodoList = styled(TodoList)`
-  & + .add-control {
-    border-radius: 0;
-    background: transparent;
-    border-top: 1px solid var(--rs-divider-border);
-  }
-`;
-
-const CountItemsContainer = styled.div`
-  color: var(--rs-gray-500);
-  font-size: 13px;
-`;
-
-const StyledListItem = styled(TodoListItem)`
-  background: transparent;
-  margin: 5px;
-
-  svg {
-    height: 16px;
-    width: auto;
-  }
-`;
+  NavContainer,
+  ListTasksContainer,
+  TopListTasksContainer,
+  StyledTodoList,
+  CountItemsContainer,
+  StyledListItem,
+} from "./styles";
+import { useTranslation } from "react-i18next";
 
 interface TodoGroupControlProps {
   activeKey: string | number;
@@ -65,6 +32,7 @@ const TodoGroupControl: FC<TodoGroupControlProps> = ({
   changeActiveGroup,
 }) => {
   const { groups } = todoList;
+  const { t } = useTranslation();
 
   const onAddGroup = useCallback(
     (title: string) => {
@@ -79,23 +47,25 @@ const TodoGroupControl: FC<TodoGroupControlProps> = ({
     [groups]
   );
 
-  const onDeleteGroup = useCallback((_target, _data, context) => {
-    const groupId = Number(context.parentElement?.dataset?.uid);
-
-    todoList.removeGroup(groupId);
+  const onDeleteGroup = useCallback((groupId) => {
+    todoList.removeGroup(Number(groupId));
   }, []);
+
+  const contextMenuItems = useMemo(
+    () => [
+      {
+        label: t("Delete group"),
+        handler: onDeleteGroup,
+        className: "delete-button",
+        icon: <TrashIcon />,
+      },
+    ],
+    [onDeleteGroup, t]
+  );
 
   return (
     <NavContainer>
-      <ContextMenu id="group-context">
-        <Dropdown.Menu>
-          <MenuItem onClick={onDeleteGroup}>
-            <Dropdown.Item icon={<TrashIcon />} className="delete-button">
-              Delete group
-            </Dropdown.Item>
-          </MenuItem>
-        </Dropdown.Menu>
-      </ContextMenu>
+      <ContextMenu id="group-context" items={contextMenuItems} />
       <TopListTasksContainer>
         <StyledTodoList>
           <StyledListItem
@@ -108,7 +78,7 @@ const TodoGroupControl: FC<TodoGroupControlProps> = ({
             active={TodoDefaultListGroup.All === activeKey}
             onClick={() => changeActiveGroup(TodoDefaultListGroup.All)}
           >
-            All
+            {t("All")}
           </StyledListItem>
 
           <StyledListItem
@@ -121,7 +91,7 @@ const TodoGroupControl: FC<TodoGroupControlProps> = ({
             active={TodoDefaultListGroup.Today === activeKey}
             onClick={() => changeActiveGroup(TodoDefaultListGroup.Today)}
           >
-            Today
+            {t("Today")}
           </StyledListItem>
 
           <StyledListItem
@@ -135,7 +105,7 @@ const TodoGroupControl: FC<TodoGroupControlProps> = ({
             active={TodoDefaultListGroup.Priority === activeKey}
             onClick={() => changeActiveGroup(TodoDefaultListGroup.Priority)}
           >
-            Priority
+            {t("Priority")}
           </StyledListItem>
         </StyledTodoList>
       </TopListTasksContainer>
@@ -143,7 +113,12 @@ const TodoGroupControl: FC<TodoGroupControlProps> = ({
       <Divider className="reset-margin" />
 
       <ListTasksContainer>
-        <StyledTodoList onAddItem={onAddGroup} addPlaceholder="Add task group">
+        <StyledTodoList
+          onAddItem={onAddGroup}
+          addPlaceholder={t("Add task group")}
+          emptyPlaceholder={`${t("No task groups")} [+]`}
+          empty={!groups.length}
+        >
           {groups.map(({ id, title }) => (
             <StyledListItem
               contextMenuId="group-context"

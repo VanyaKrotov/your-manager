@@ -12,6 +12,8 @@ class NoteModel {
             title TEXT,
             userId INTEGER,
             content TEXT,
+            type INTEGER,
+            priority BOOL,
             dateCreated REAL,
             lastUpdate REAL
         )`
@@ -24,7 +26,10 @@ class NoteModel {
       [userId]
     );
 
-    return mapSqlResultToArray(result);
+    return mapSqlResultToArray(result).map(({ priority, ...lastProps }) => ({
+      priority: priority === "true",
+      ...lastProps,
+    }));
   }
 
   public static async selectById(noteId: number) {
@@ -37,13 +42,19 @@ class NoteModel {
       return null;
     }
 
-    return result.rows.item(0);
+    const resultItem = result.rows.item(0);
+
+    return { ...resultItem, priority: resultItem.priority === "true" };
   }
 
-  public static async add({ title, userId }: Pick<Note, "title" | "userId">) {
+  public static async add({
+    title,
+    userId,
+    type,
+  }: Pick<Note, "title" | "userId" | "type">) {
     const { result } = await sqlQuery(
-      `INSERT INTO ${this.MODEL_NAME} (title, content, userId, dateCreated) values(?, ?, ?, ?)`,
-      [title, "", userId, new Date().getTime()]
+      `INSERT INTO ${this.MODEL_NAME} (title, content, userId, dateCreated, priority, type) values(?, ?, ?, ?, ?, ?)`,
+      [title, "", userId, new Date().getTime(), false, type]
     );
 
     if (!result.insertId) {
@@ -59,11 +70,12 @@ class NoteModel {
       content,
       title,
       lastUpdate = new Date().getTime(),
+      priority = false,
     }: Partial<Omit<Note, "id" | "userId" | "dateCreated">>
   ) {
     const { result } = await sqlQuery(
-      `UPDATE ${this.MODEL_NAME} SET title = ?, content = ?, lastUpdate = ? WHERE id = ?`,
-      [title, content, lastUpdate, noteId]
+      `UPDATE ${this.MODEL_NAME} SET title = ?, content = ?, lastUpdate = ?, priority = ? WHERE id = ?`,
+      [title, content, lastUpdate, priority, noteId]
     );
 
     if (!result.rowsAffected) {
@@ -71,6 +83,15 @@ class NoteModel {
     }
 
     return NoteModel.selectById(noteId);
+  }
+
+  public static async delete(noteId: number) {
+    const { result } = await sqlQuery(
+      `DELETE FROM ${this.MODEL_NAME} WHERE id = ?`,
+      [noteId]
+    );
+
+    return result.rowsAffected > 0;
   }
 }
 

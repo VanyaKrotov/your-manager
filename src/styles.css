@@ -32,6 +32,56 @@ body {
   align-items: center;
 }
 
+time {
+  font-size: 12px;
+  line-height: 14px;
+  color: var(--rs-text-secondary);
+}
+
+.w-200 {
+  width: 200px;
+}
+
+/* styled timymce */
+.tox.tox-tinymce {
+  height: 100% !important;
+}
+
+.tox-tinymce {
+  border: 1px solid var(--rs-divider-border) !important;
+}
+
+.tox .tox-menubar,
+.tox .tox-toolbar-overlord,
+.tox .tox-toolbar,
+.tox .tox-toolbar__overflow,
+.tox .tox-toolbar__primary,
+.tox .tox-menu {
+  background-color: var(--rs-body) !important;
+}
+
+.tox .tox-collection--list .tox-collection__group {
+  border-color: var(--rs-divider-border) !important;
+}
+
+.tox:not([dir="rtl"]) .tox-toolbar__group:not(:last-of-type) {
+  border-right: 1px solid var(--rs-divider-border) !important;
+}
+
+.tox .tox-menubar + .tox-toolbar,
+.tox .tox-menubar + .tox-toolbar-overlord .tox-toolbar__primary {
+  border-top: 1px solid var(--rs-divider-border) !important;
+}
+
+/* end region */
+
+.flex-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .full-height {
   height: 100%;
 }
@@ -84,6 +134,10 @@ body {
 
 .reset-margin {
   margin: 0;
+}
+
+.color-secondary {
+  color: var(--rs-text-secondary);
 }
 
 .hover-icon:hover {

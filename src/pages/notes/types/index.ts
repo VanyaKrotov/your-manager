@@ -1,3 +1,5 @@
 export interface NotesFilter {
-  active: number;
+  active: number | null;
 }
+
+export type NotesFilterHandler = (value: Partial<NotesFilter>) => void;

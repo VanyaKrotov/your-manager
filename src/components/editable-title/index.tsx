@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import { Input } from "rsuite";
+import { Input, InputProps } from "rsuite";
 import styled from "styled-components";
 
 const Container = styled.span`
@@ -13,12 +13,16 @@ const Container = styled.span`
   }
 `;
 
-interface EditableTitleProps {
+interface EditableTitleProps extends InputProps {
   onSave: (title: string) => void;
   children: string;
 }
 
-const EditableTitle: FC<EditableTitleProps> = ({ children, onSave }) => {
+const EditableTitle: FC<EditableTitleProps> = ({
+  children,
+  onSave,
+  ...restProps
+}) => {
   const [value, setValue] = useState(children);
 
   const onSaveHandler = useCallback(() => onSave(value), [onSave, value]);
@@ -30,6 +34,7 @@ const EditableTitle: FC<EditableTitleProps> = ({ children, onSave }) => {
   return (
     <Container className="full-width">
       <Input
+        {...restProps}
         value={value}
         onChange={(val) => setValue(val as string)}
         onBlur={onSaveHandler}

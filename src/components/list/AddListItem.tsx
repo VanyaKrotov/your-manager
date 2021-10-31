@@ -32,12 +32,16 @@ const AddListItem: FC<AddListItemProps> = ({
   const isShowInput = Boolean(value || focused);
 
   return (
-    <AddItemContainer onClick={() => setFocused(true)} data-focused={focused} className="add-control">
+    <AddItemContainer
+      onClick={() => setFocused(true)}
+      data-focused={focused}
+      className="add-control"
+    >
       <FlexboxGrid align="middle" justify="space-between">
-        <FlexboxGrid.Item>
+        <FlexboxGrid.Item colspan={2}>
           {isShowInput ? <AddOutlineIcon /> : <PlusIcon />}
         </FlexboxGrid.Item>
-        <FlexboxGrid.Item>
+        <FlexboxGrid.Item colspan={22}>
           {isShowInput ? (
             <Input
               size="sm"
