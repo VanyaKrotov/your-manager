@@ -38,10 +38,10 @@ const AddListItem: FC<AddListItemProps> = ({
       className="add-control"
     >
       <FlexboxGrid align="middle" justify="space-between">
-        <FlexboxGrid.Item colspan={2}>
+        <FlexboxGrid.Item>
           {isShowInput ? <AddOutlineIcon /> : <PlusIcon />}
         </FlexboxGrid.Item>
-        <FlexboxGrid.Item colspan={22}>
+        <FlexboxGrid.Item>
           {isShowInput ? (
             <Input
               size="sm"

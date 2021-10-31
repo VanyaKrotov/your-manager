@@ -2,12 +2,7 @@ import { Avatar, IconButton, Sidebar } from "rsuite";
 import styled from "styled-components";
 
 export const LogoContainer = styled.div`
-  padding: 20px;
-
-  & svg {
-    width: 24px;
-    height: auto;
-  }
+  padding: 15px;
 
   & svg[data-expanded="false"] {
     width: 20px;

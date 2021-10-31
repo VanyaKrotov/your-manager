@@ -30,7 +30,7 @@ export const TodoListElement = styled(List)`
 
 const LIST_ITEM_STYLE = css`
   border-radius: 4px;
-  background: var(--rs-gray-800);
+  background: var(--ym-list-bg);
 
   & svg {
     display: flex;
@@ -39,7 +39,7 @@ const LIST_ITEM_STYLE = css`
   }
 
   &:hover {
-    background: var(--rs-gray-800);
+    background: var(--ym-list-bg-hover);
   }
 `;
 
@@ -63,7 +63,7 @@ export const ListItem = styled(List.Item)`
   }
 
   &[data-active="true"] {
-    background: var(--rs-gray-800);
+    background: var(--ym-list-bg-active);
     color: var(--rs-primary-700);
     font-weight: bold;
   }
@@ -75,12 +75,8 @@ export const AddItemContainer = styled.div`
   cursor: text;
   padding: 10px 14px;
 
-  & > div > div:last-child {
-    flex: auto;
-  }
-
   & p {
-    font-size: 16px;
+    font-size: 14px;
     margin: 3px 0px;
     display: inline-block;
     padding-left: 12px;
@@ -94,6 +90,15 @@ export const AddItemContainer = styled.div`
   input:focus {
     border: none;
     box-shadow: none;
+  }
+
+  & > div > div:first-child {
+    width: 20px;
+    text-align: center;
+  }
+
+  & > div > div:last-child {
+    width: calc(100% - 20px);
   }
 `;
 

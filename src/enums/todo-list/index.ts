@@ -3,3 +3,7 @@ export enum TodoDefaultListGroup {
   Today = -2,
   Priority = -3,
 }
+
+export const TODO_DEFAULT_LIST_GROUP_VALUES = Object.values(
+  TodoDefaultListGroup
+).filter(Number.isInteger);

@@ -5,6 +5,35 @@ html,
   height: 100%;
 }
 
+.logo {
+  width: 24px;
+  height: 24px;
+  background-color: var(--rs-primary-700);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.logo > span {
+  font-weight: bold;
+  font-size: 11px;
+}
+
+body.rs-theme-dark {
+  --ym-list-bg: #1a1d24;
+  --ym-list-bg-hover: #292d33;
+  --ym-list-bg-active: #282b2e;
+}
+
+body.rs-theme-light {
+  --ym-list-bg: #efefef;
+
+  --ym-list-bg-hover: #dddddd;
+  --ym-list-bg-active: #dbdbdb;
+}
+
 /* TODO */
 body {
   overflow: hidden;
@@ -111,10 +140,10 @@ time {
   width: auto;
 }
 
-.delete-button,
-.delete-button:active,
-.delete-button:focus,
-.delete-button:hover {
+.delete-button:not([aria-disabled="true"]),
+.delete-button:not([aria-disabled="true"]):active,
+.delete-button:not([aria-disabled="true"]):focus,
+.delete-button:not([aria-disabled="true"]):hover {
   color: var(--rs-red-600);
 }
 

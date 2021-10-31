@@ -62,5 +62,5 @@ export const ListContainer = styled.div`
 
 export const StepsState = styled.div`
   font-size: 10px;
-  color: var(--rs-gray-200);
+  color: var(--rs-btn-subtle-text);
 `;

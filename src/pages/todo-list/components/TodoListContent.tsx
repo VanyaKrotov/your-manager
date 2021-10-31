@@ -5,6 +5,7 @@ import {
   ButtonGroup,
   ButtonToolbar,
   Container,
+  Dropdown,
   FlexboxGrid,
   IconButton,
 } from "rsuite";
@@ -26,7 +27,10 @@ import { pageView, todoList } from "../../../store";
 
 import { StyledContent, Title, ListContainer, StepsState } from "./styles";
 import { useTranslation } from "react-i18next";
-import { TodoDefaultListGroup } from "../../../enums/todo-list";
+import {
+  TodoDefaultListGroup,
+  TODO_DEFAULT_LIST_GROUP_VALUES,
+} from "../../../enums/todo-list";
 import EditableTitle from "../../../components/editable-title";
 
 interface TodoListContentProps {
@@ -115,6 +119,13 @@ const TodoListContent: FC<TodoListContentProps> = ({
 
   const onSaveTitle = useCallback((title) => console.log(title), []);
 
+  const onDeleteGroup = useCallback(() => {
+    onCloseRightSide();
+    todoList
+      .removeGroup(group as number)
+      .then(() => changeFilter({ group: TodoDefaultListGroup.All }));
+  }, [group, changeFilter, onCloseRightSide]);
+
   const currentGroup = useMemo(
     () => groups.find(({ id }) => id === group),
     [group, groups]
@@ -134,10 +145,14 @@ const TodoListContent: FC<TodoListContentProps> = ({
     }
   }, [currentGroup, group, t]);
 
+  const disabledRemove = useMemo(
+    () => TODO_DEFAULT_LIST_GROUP_VALUES.includes(group),
+    [group]
+  );
+
   return (
     <Container>
       <ContextMenu items={contextMenuItems} id="todo-list-context" />
-
       <FlexboxGrid>
         <FlexboxGrid.Item colspan={center}>
           <StyledContent>
@@ -176,7 +191,25 @@ const TodoListContent: FC<TodoListContentProps> = ({
                     </Button>
                   </ButtonGroup>
 
-                  <IconButton icon={<MoreIcon />} size="sm" />
+                  <Dropdown
+                    placement="bottomEnd"
+                    renderToggle={(props, ref) => (
+                      <IconButton
+                        {...props}
+                        ref={ref}
+                        icon={<MoreIcon />}
+                        size="sm"
+                      />
+                    )}
+                  >
+                    <Dropdown.Item
+                      className="delete-button"
+                      onClick={onDeleteGroup}
+                      disabled={disabledRemove}
+                    >
+                      {t("Delete group")}
+                    </Dropdown.Item>
+                  </Dropdown>
                 </ButtonToolbar>
               </FlexboxGrid.Item>
             </FlexboxGrid>

@@ -14,7 +14,6 @@ import { Link, useLocation } from "react-router-dom";
 
 import TaskIcon from "@rsuite/icons/Task";
 import ParagraphIcon from "@rsuite/icons/Paragraph";
-import LogoIcon from "@rsuite/icons/AppSelect";
 import CharacterLockIcon from "@rsuite/icons/CharacterLock";
 // import ArrowLeftIcon from "@rsuite/icons/ArrowLeft";
 // import ArrowRightIcon from "@rsuite/icons/ArrowRight";
@@ -96,7 +95,9 @@ const App = () => {
             <LogoContainer>
               <FlexboxGrid align="middle">
                 <FlexboxGrid.Item>
-                  <LogoIcon data-expanded={pageView.expandedSideBar} />
+                  <div className="logo">
+                    <span>YM</span>
+                  </div>
                 </FlexboxGrid.Item>
                 <FlexboxGrid.Item>
                   <LogoTitle data-expanded={pageView.expandedSideBar}>
