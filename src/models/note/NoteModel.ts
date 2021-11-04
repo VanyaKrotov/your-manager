@@ -1,3 +1,4 @@
+import { SubType } from "enums/notes";
 import { mapSqlResultToArray } from "helpers/mappers";
 
 import { Note } from "types/notes";
@@ -15,6 +16,7 @@ class NoteModel {
             userId INTEGER,
             content TEXT,
             type INTEGER,
+            subType INTEGER,
             priority BOOL,
             dateCreated REAL,
             lastUpdate REAL
@@ -55,8 +57,8 @@ class NoteModel {
     type,
   }: Pick<Note, "title" | "userId" | "type">) {
     const { result } = await sqlQuery(
-      `INSERT INTO ${this.MODEL_NAME} (title, content, userId, dateCreated, priority, type) values(?, ?, ?, ?, ?, ?)`,
-      [title, "", userId, new Date().getTime(), false, type]
+      `INSERT INTO ${this.MODEL_NAME} (title, content, userId, dateCreated, priority, type, subType) values(?, ?, ?, ?, ?, ?, ?)`,
+      [title, "", userId, new Date().getTime(), false, type, SubType.Rich]
     );
 
     if (!result.insertId) {
@@ -73,11 +75,12 @@ class NoteModel {
       title,
       lastUpdate = new Date().getTime(),
       priority = false,
+      subType
     }: Partial<Omit<Note, "id" | "userId" | "dateCreated">>
   ) {
     const { result } = await sqlQuery(
-      `UPDATE ${this.MODEL_NAME} SET title = ?, content = ?, lastUpdate = ?, priority = ? WHERE id = ?`,
-      [title, content, lastUpdate, priority, noteId]
+      `UPDATE ${this.MODEL_NAME} SET title = ?, content = ?, lastUpdate = ?, priority = ?, subType = ? WHERE id = ?`,
+      [title, content, lastUpdate, priority, subType, noteId]
     );
 
     if (!result.rowsAffected) {

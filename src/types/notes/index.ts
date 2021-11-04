@@ -1,4 +1,4 @@
-import { NoteType } from "enums/notes";
+import { NoteType, SubType } from "enums/notes";
 
 export interface Note {
   id: number;
@@ -8,5 +8,6 @@ export interface Note {
   dateCreated: number;
   priority: boolean;
   type: NoteType;
+  subType: SubType;
   lastUpdate: number | null;
 }

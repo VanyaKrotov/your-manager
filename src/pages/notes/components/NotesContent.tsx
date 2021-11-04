@@ -2,27 +2,36 @@ import { observer } from "mobx-react-lite";
 import { FC, useCallback, useMemo } from "react";
 import styled from "styled-components";
 import { format } from "date-fns";
-import { Dropdown, FlexboxGrid, IconButton } from "rsuite";
+import {
+  Button,
+  ButtonToolbar,
+  Dropdown,
+  FlexboxGrid,
+  IconButton,
+  SelectPicker,
+} from "rsuite";
 import { useTranslation } from "react-i18next";
 
 import Editor from "components/editor";
 import EditableTitle from "components/editable-title";
+import CodeEditor from "components/code-editor";
 
 import { notes, pageView } from "store";
 
-import { NoteType } from "enums/notes";
+import { NoteType, SubType } from "enums/notes";
 
 import { NotesFilter, NotesFilterHandler } from "../types";
+import { SUB_TYPE_OPTIONS } from "../utils/constants";
 
 import MoreIcon from "@rsuite/icons/More";
 
 const TitleContainer = styled.div`
-  height: 50px;
+  height: 55px;
   padding: 0px 10px;
 `;
 
 const EditorContainer = styled.div`
-  height: calc(100% - 50px);
+  height: calc(100% - 55px);
 `;
 
 const Title = styled(EditableTitle)`
@@ -48,12 +57,30 @@ const NotesContent: FC<NotesContentProps> = ({
     [active, items]
   );
 
-  const onSaveContent = useCallback(
+  const onSaveEditorContent = useCallback(
     (event) => {
       const { id, title } = currentItem!;
       const content = event.target.getContent();
 
       notes.updateNote(id, { content, title });
+    },
+    [currentItem]
+  );
+
+  const onSaveCodeEditorContent = useCallback(
+    (content) => {
+      const { id, title } = currentItem!;
+
+      notes.updateNote(id, { content, title });
+    },
+    [currentItem]
+  );
+
+  const onChangeSubType = useCallback(
+    (nextType) => {
+      const { id } = currentItem!;
+
+      notes.updateNote(id, { subType: nextType });
     },
     [currentItem]
   );
@@ -86,7 +113,16 @@ const NotesContent: FC<NotesContentProps> = ({
     );
   }
 
-  const { content = "", title, dateCreated, priority, type } = currentItem;
+  const {
+    content = "",
+    title,
+    dateCreated,
+    priority,
+    type,
+    subType,
+  } = currentItem;
+
+  const isRichEditor = subType === SubType.Rich;
 
   return (
     <div className="full-height">
@@ -103,7 +139,7 @@ const NotesContent: FC<NotesContentProps> = ({
           </FlexboxGrid.Item>
           <FlexboxGrid.Item>
             <FlexboxGrid
-              className="full-height w-200"
+              className="full-height w-300"
               align="middle"
               justify="space-between"
             >
@@ -117,38 +153,53 @@ const NotesContent: FC<NotesContentProps> = ({
                 </time>
               </FlexboxGrid.Item>
               <FlexboxGrid.Item>
-                <Dropdown
-                  renderToggle={(props, ref) => (
-                    <IconButton
-                      ref={ref}
-                      {...props}
-                      icon={<MoreIcon />}
-                      size="sm"
-                    />
-                  )}
-                  placement="bottomEnd"
-                >
-                  <Dropdown.Item onClick={onChangePriority}>
-                    {priority ? t("Remove") : t("Add to")} {t("priority")}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={onDeleteItem}
-                    className="delete-button"
+                <ButtonToolbar>
+                  <SelectPicker
+                    size="sm"
+                    searchable={false}
+                    cleanable={false}
+                    placement="bottomEnd"
+                    data={SUB_TYPE_OPTIONS}
+                    onChange={onChangeSubType}
+                    value={subType}
+                  />
+                  <Dropdown
+                    renderToggle={(props, ref) => (
+                      <IconButton
+                        ref={ref}
+                        {...props}
+                        icon={<MoreIcon />}
+                        size="sm"
+                      />
+                    )}
+                    placement="bottomEnd"
                   >
-                    {t("Delete note")}
-                  </Dropdown.Item>
-                </Dropdown>
+                    <Dropdown.Item onClick={onChangePriority}>
+                      {priority ? t("Remove") : t("Add to")} {t("priority")}
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={onDeleteItem}
+                      className="delete-button"
+                    >
+                      {t("Delete note")}
+                    </Dropdown.Item>
+                  </Dropdown>
+                </ButtonToolbar>
               </FlexboxGrid.Item>
             </FlexboxGrid>
           </FlexboxGrid.Item>
         </FlexboxGrid>
       </TitleContainer>
       <EditorContainer>
-        <Editor
-          initialValue={content}
-          onSaveContent={onSaveContent}
-          onBlur={onSaveContent}
-        />
+        {isRichEditor ? (
+          <Editor
+            initialValue={content}
+            onSaveContent={onSaveEditorContent}
+            onBlur={onSaveEditorContent}
+          />
+        ) : (
+          <CodeEditor content={content} onSave={onSaveCodeEditorContent} />
+        )}
       </EditorContainer>
     </div>
   );

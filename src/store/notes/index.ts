@@ -84,7 +84,9 @@ class NotesStore {
     this.rawItems = await NoteModel.selectAllByUserId(userId);
   }
 
-  public async addNote(note: Pick<Note, "title" | "userId" | "type">) {
+  public async addNote(
+    note: Pick<Note, "title" | "userId" | "type">
+  ) {
     const addedNote = await NoteModel.add(note);
 
     if (addedNote) {

@@ -5,6 +5,7 @@
   "homepage": "https://vanyakrotov.github.io/your-manager",
   "dependencies": {
     "@babel/core": "7.12.3",
+    "@monaco-editor/react": "^4.3.1",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@rsuite/icons": "^1.0.2",
     "@svgr/webpack": "5.5.0",
@@ -59,6 +60,7 @@
     "mobx": "^6.3.5",
     "mobx-react": "^7.2.1",
     "modx": "^0.0.2",
+    "monaco-editor": "^0.29.1",
     "npm": "^8.1.0",
     "optimize-css-assets-webpack-plugin": "5.0.4",
     "pnp-webpack-plugin": "1.6.4",
@@ -120,6 +122,7 @@
   },
   "devDependencies": {
     "@types/autosize": "^4.0.0",
+    "@types/lodash-es": "^4.17.5",
     "@types/query-string": "^6.3.0",
     "@types/react-router-dom": "^5.3.1",
     "@types/styled-components": "^5.1.15",
