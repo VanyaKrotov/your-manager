@@ -1,16 +1,15 @@
 import { Editor as LibEditor, IAllProps } from "@tinymce/tinymce-react";
 import { useEffect, useState } from "react";
+import { observer } from "mobx-react";
+import { useTranslation } from "react-i18next";
+
+import { pageView } from "store";
 
 import { EDITOR_INIT_OPTIONS } from "./constants";
 
-import config from "../../config.json";
-import { observer } from "mobx-react";
-import { pageView } from "../../store";
-import { useTranslation } from "react-i18next";
+import config from "config.json";
 
-interface EditorProps extends IAllProps {}
-
-const Editor = (props: EditorProps) => {
+const Editor = (props: IAllProps) => {
   const [reloading, setReloading] = useState(false);
   const { t } = useTranslation();
 

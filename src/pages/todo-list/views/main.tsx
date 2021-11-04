@@ -1,6 +1,8 @@
-import PageContent from "../../../components/page-content";
+import PageContent from "components/page-content";
+
 import TodoGroupControl from "../components/TodoGroupControl";
 import TodoListContent from "../components/TodoListContent";
+
 import { useTodoListFilter } from "../utils/useTodoListFilter";
 
 const TodoList = () => {

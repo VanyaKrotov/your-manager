@@ -1,17 +1,21 @@
 import { observer } from "mobx-react";
 import { FC, useCallback, useEffect, useMemo } from "react";
+import { SelectPicker } from "rsuite";
 import { useTranslation } from "react-i18next";
-import { List, ListItem } from "../../../components/list";
-import { notes, user } from "../../../store";
+import styled from "styled-components";
+
+import { List, ListItem } from "components/list";
+import ContextMenu from "components/context-menu";
+
+import { notes, user } from "store";
+
+import { NoteType } from "enums/notes";
+
 import { NotesFilter } from "../types";
 
-import TextImageIcon from "@rsuite/icons/TextImage";
-import styled from "styled-components";
-import Star from "../../../icons/Star";
-import ContextMenu from "../../../components/context-menu";
+import Star from "icons/Star";
 import TrashIcon from "@rsuite/icons/Trash";
-import { SelectPicker } from "rsuite";
-import { NoteType } from "../../../enums/notes";
+import TextImageIcon from "@rsuite/icons/TextImage";
 
 const StyledList = styled(List)`
   & + .add-control {

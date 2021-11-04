@@ -1,7 +1,9 @@
 import { parse, stringify } from "query-string";
 import { useCallback, useMemo } from "react";
 import { useHistory, useLocation } from "react-router";
-import { TodoDefaultListGroup } from "../../../enums/todo-list";
+
+import { TodoDefaultListGroup } from "enums/todo-list";
+
 import { ItemsFilter, TodoListFilter } from "../types";
 
 export type ChangeTodoFilterHandler = (values: Partial<TodoListFilter>) => void;

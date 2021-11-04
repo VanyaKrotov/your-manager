@@ -1,7 +1,9 @@
+import { SQLQueryResult } from "types/database";
+import { User, UserFull } from "types/user";
+
+import { DEFAULT_USERNAME } from "store/user/constants";
+
 import { modelInitRunner, sqlQuery } from "..";
-import { DEFAULT_USERNAME } from "../../store/user/constants";
-import { SQLQueryResult } from "../../types/database";
-import { User, UserFull } from "../../types/user";
 
 class UserModel {
   public static MODEL_NAME = "user";

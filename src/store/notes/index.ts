@@ -1,9 +1,11 @@
 import { format, isToday, isYesterday } from "date-fns";
 import { makeAutoObservable } from "mobx";
+
+import { NoteType } from "enums/notes";
+import { Note } from "types/notes";
+import NoteModel from "models/note/NoteModel";
+
 import { i18n, pageView } from "..";
-import { NoteType } from "../../enums/notes";
-import NoteModel from "../../models/note/NoteModel";
-import { Note } from "../../types/notes";
 
 class NotesStore {
   public rawItems: Note[] = [];

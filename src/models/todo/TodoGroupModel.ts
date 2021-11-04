@@ -1,6 +1,9 @@
+import { mapSqlResultToArray } from "helpers/mappers";
+
+import { TodoGroup } from "types/todo-list";
+
 import { modelInitRunner, sqlQuery } from "..";
-import { mapSqlResultToArray } from "../../helpers/mappers";
-import { TodoGroup } from "../../types/todo-list";
+
 import TodoItemModel from "./TodoIteModel";
 
 class TodoGroupModel {

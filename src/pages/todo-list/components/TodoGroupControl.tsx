@@ -1,17 +1,14 @@
 import { FC, useCallback, useMemo } from "react";
 import { Divider } from "rsuite";
 import { observer } from "mobx-react";
+import { useTranslation } from "react-i18next";
 
-import TimeIcon from "@rsuite/icons/Time";
-import TrashIcon from "@rsuite/icons/Trash";
-import AttachmentIcon from "@rsuite/icons/Attachment";
-import ListIcon from "@rsuite/icons/List";
+import { todoList, user } from "store";
 
-import { todoList, user } from "../../../store";
-import { TodoDefaultListGroup } from "../../../enums/todo-list";
-import Star from "../../../icons/Star";
+import { TodoDefaultListGroup } from "enums/todo-list";
 
-import ContextMenu from "../../../components/context-menu";
+import ContextMenu from "components/context-menu";
+
 import {
   NavContainer,
   ListTasksContainer,
@@ -20,7 +17,12 @@ import {
   CountItemsContainer,
   StyledListItem,
 } from "./styles";
-import { useTranslation } from "react-i18next";
+
+import Star from "icons/Star";
+import TimeIcon from "@rsuite/icons/Time";
+import TrashIcon from "@rsuite/icons/Trash";
+import AttachmentIcon from "@rsuite/icons/Attachment";
+import ListIcon from "@rsuite/icons/List";
 
 interface TodoGroupControlProps {
   activeKey: string | number;

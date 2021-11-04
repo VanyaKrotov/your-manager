@@ -1,15 +1,20 @@
 import { observer } from "mobx-react-lite";
 import { FC, useCallback, useMemo } from "react";
-import { notes, pageView } from "../../../store";
-import { NotesFilter, NotesFilterHandler } from "../types";
-import Editor from "../../../components/editor";
-import EditableTitle from "../../../components/editable-title";
 import styled from "styled-components";
-import { Dropdown, FlexboxGrid, IconButton } from "rsuite";
-import MoreIcon from "@rsuite/icons/More";
 import { format } from "date-fns";
-import { NoteType } from "../../../enums/notes";
+import { Dropdown, FlexboxGrid, IconButton } from "rsuite";
 import { useTranslation } from "react-i18next";
+
+import Editor from "components/editor";
+import EditableTitle from "components/editable-title";
+
+import { notes, pageView } from "store";
+
+import { NoteType } from "enums/notes";
+
+import { NotesFilter, NotesFilterHandler } from "../types";
+
+import MoreIcon from "@rsuite/icons/More";
 
 const TitleContainer = styled.div`
   height: 50px;

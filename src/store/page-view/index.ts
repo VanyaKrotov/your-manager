@@ -1,6 +1,8 @@
 import { ru, enUS } from "date-fns/locale";
 import { makeAutoObservable } from "mobx";
-import { Language, Theme } from "../../enums/page-view";
+
+import { Language, Theme } from "enums/page-view";
+
 import { DEFAULT_USER_ID } from "../user/constants";
 
 class PageViewStore {

@@ -1,6 +1,7 @@
-import { parse, stringify } from "query-string";
 import { useCallback, useMemo } from "react";
+import { parse, stringify } from "query-string";
 import { useHistory, useLocation } from "react-router";
+
 import { NotesFilter, NotesFilterHandler } from "../types";
 
 const useNotesFilter = (): [NotesFilter, NotesFilterHandler] => {

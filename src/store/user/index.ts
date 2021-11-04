@@ -1,7 +1,9 @@
 import { makeAutoObservable } from "mobx";
 
-import { createUsernameSymbols } from "../../helpers/user";
-import { User } from "../../types/user";
+import { createUsernameSymbols } from "helpers/user";
+
+import { User } from "types/user";
+
 import { DEFAULT_USERNAME, DEFAULT_USER_ID } from "./constants";
 
 class UserStore {

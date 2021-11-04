@@ -1,9 +1,11 @@
 import { isToday } from "date-fns";
 import { makeAutoObservable } from "mobx";
-import { TodoDefaultListGroup } from "../../enums/todo-list";
-import TodoGroupModel from "../../models/todo/TodoGroupModel";
-import TodoItemModel from "../../models/todo/TodoIteModel";
-import { TodoGroup, TodoItem } from "../../types/todo-list";
+
+import { TodoGroup, TodoItem } from "types/todo-list";
+import { TodoDefaultListGroup } from "enums/todo-list";
+
+import TodoGroupModel from "models/todo/TodoGroupModel";
+import TodoItemModel from "models/todo/TodoIteModel";
 
 interface ItemsMap {
   [key: string | number]: TodoItem[];

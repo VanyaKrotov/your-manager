@@ -1,6 +1,8 @@
+import { mapSqlResultToArray } from "helpers/mappers";
+
+import { Note } from "types/notes";
+
 import { modelInitRunner, sqlQuery } from "..";
-import { mapSqlResultToArray } from "../../helpers/mappers";
-import { Note } from "../../types/notes";
 
 class NoteModel {
   public static MODEL_NAME = "note_model";

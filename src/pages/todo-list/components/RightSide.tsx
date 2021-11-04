@@ -1,18 +1,23 @@
 import { FC, useCallback, useMemo } from "react";
 import styled from "styled-components";
-import EditableTitle from "../../../components/editable-title";
-import Star from "../../../icons/Star";
-import { pageView, todoList } from "../../../store";
-import TodoIcon from "../../../components/list/ItemIcon";
-import { List, ListItem } from "../../../components/list";
-import { TodoState } from "../../../types/todo-list";
-import CloseIcon from "@rsuite/icons/Close";
 import { FlexboxGrid, IconButton } from "rsuite";
+import { formatDistance } from "date-fns";
+import { useTranslation } from "react-i18next";
+
+import EditableTitle from "components/editable-title";
+import TodoIcon from "components/list/ItemIcon";
+import { List, ListItem } from "components/list";
+
+import { pageView, todoList } from "store";
+
+import { TodoState } from "types/todo-list";
+
+import DescriptionTextarea from "./DescriptionTextarea";
+
+import Star from "icons/Star";
+import CloseIcon from "@rsuite/icons/Close";
 import ArrowRightIcon from "@rsuite/icons/ArrowRight";
 import TrashIcon from "@rsuite/icons/Trash";
-import { formatDistance } from "date-fns";
-import DescriptionTextarea from "./DescriptionTextarea";
-import { useTranslation } from "react-i18next";
 
 const Container = styled.div`
   height: 100vh;

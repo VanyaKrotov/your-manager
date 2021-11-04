@@ -1,60 +1,42 @@
-import { /* FC, */ useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import {
   Container,
   Nav,
   Sidenav,
   CustomProvider,
   FlexboxGrid,
-  // IconButtonProps,
   Dropdown,
 } from "rsuite";
 import { ruRU, enUS } from "rsuite/locales";
 import { observer } from "mobx-react-lite";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import TaskIcon from "@rsuite/icons/Task";
 import ParagraphIcon from "@rsuite/icons/Paragraph";
 import CharacterLockIcon from "@rsuite/icons/CharacterLock";
-// import ArrowLeftIcon from "@rsuite/icons/ArrowLeft";
-// import ArrowRightIcon from "@rsuite/icons/ArrowRight";
 import UserInfoIcon from "@rsuite/icons/UserInfo";
 import SettingIcon from "@rsuite/icons/Setting";
 import UserChangeIcon from "@rsuite/icons/UserChange";
 
-import { routes } from "./helpers/router";
-import Routes from "./pages";
-import { pageView, user } from "./store";
+import { routes } from "helpers/router";
+import { pageView, user } from "store";
+import Routes from "pages";
 
 import {
   LogoContainer,
   LogoTitle,
   StyledSidebar,
-  // TogglerButton,
   UserAvatar,
   UserTitle,
 } from "./appStyles";
+import Moon from "icons/Moon";
+import Sun from "icons/Sun";
+import LanguageIcon from "icons/Language";
+import { Language, Theme } from "enums/page-view";
 
 import "rsuite/dist/rsuite.min.css";
 import "./styles.css";
-import Moon from "./icons/Moon";
-import Sun from "./icons/Sun";
-import LanguageIcon from "./icons/Language";
-import { Language, Theme } from "./enums/page-view";
-
-import { useTranslation } from "react-i18next";
-
-// const ExpandedToggler: FC<IconButtonProps & { expanded: boolean }> = ({
-//   expanded,
-//   onClick,
-// }) => (
-//   <TogglerButton
-//     icon={expanded ? <ArrowLeftIcon /> : <ArrowRightIcon />}
-//     size="xs"
-//     circle
-//     onClick={onClick}
-//     appearance="primary"
-//   />
-// );
 
 const App = () => {
   const { pathname } = useLocation();
@@ -204,10 +186,6 @@ const App = () => {
                 </Dropdown>
               </Nav>
             </Sidenav.Body>
-            {/* <ExpandedToggler
-              expanded={pageView.expandedSideBar}
-              onClick={pageView.toggleExpanded}
-            /> */}
           </Sidenav>
         </StyledSidebar>
 

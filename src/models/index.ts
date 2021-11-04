@@ -1,6 +1,8 @@
-import config from "../config.json";
-import { createQueryHandler } from "../helpers/database";
-import { SQLQueryResult } from "../types/database";
+import { createQueryHandler } from "helpers/database";
+
+import { SQLQueryResult } from "types/database";
+
+import config from "config.json";
 
 const {
   db: { name, version, displayName, size },

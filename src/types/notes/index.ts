@@ -1,4 +1,4 @@
-import { NoteType } from "../../enums/notes";
+import { NoteType } from "enums/notes";
 
 export interface Note {
   id: number;

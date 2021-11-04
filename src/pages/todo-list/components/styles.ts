@@ -1,10 +1,7 @@
 import { Content } from "rsuite";
 import styled from "styled-components";
 
-import {
-  List as TodoList,
-  ListItem as TodoListItem,
-} from "../../../components/list";
+import { List as TodoList, ListItem as TodoListItem } from "components/list";
 
 export const NavContainer = styled.div`
   height: 100vh;

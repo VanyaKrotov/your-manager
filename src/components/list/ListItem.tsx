@@ -1,7 +1,8 @@
 import React, { FC } from "react";
 import { FlexboxGrid, ListItemProps } from "rsuite";
-import { ItemContent, ItemIcon, ListItem } from "./styles";
 import { ContextMenuTrigger } from "react-contextmenu";
+
+import { ItemContent, ItemIcon, ListItem } from "./styles";
 
 interface TodoListItemProps extends ListItemProps {
   icon?: React.ReactNode;

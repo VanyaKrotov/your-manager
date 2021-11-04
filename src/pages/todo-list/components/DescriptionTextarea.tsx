@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { InputProps } from "rsuite";
-import Textarea from "../../../components/textarea";
+
+import Textarea from "components/textarea";
 
 interface DescriptionTextareaProps extends InputProps {
   value: string;

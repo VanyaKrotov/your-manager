@@ -1,6 +1,7 @@
 import { FC } from "react";
 import styled from "styled-components";
-import { TodoState } from "../../types/todo-list";
+
+import { TodoState } from "types/todo-list";
 
 const StyledSvg = styled.svg`
   & .success {

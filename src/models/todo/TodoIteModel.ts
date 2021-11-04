@@ -1,6 +1,8 @@
+import { TodoItem } from "types/todo-list";
+
+import { mapSqlResultToArray } from "helpers/mappers";
+
 import { modelInitRunner, sqlQuery } from "..";
-import { mapSqlResultToArray } from "../../helpers/mappers";
-import { TodoItem } from "../../types/todo-list";
 
 class TodoItemModel {
   public static MODEL_NAME = "todo_item_model";

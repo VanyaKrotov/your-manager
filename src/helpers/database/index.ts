@@ -1,4 +1,4 @@
-import { SQLQueryResult } from "../../types/database";
+import { SQLQueryResult } from "types/database";
 
 export const createQueryHandler =
   (db: Database) =>

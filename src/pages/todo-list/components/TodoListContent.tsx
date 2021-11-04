@@ -9,29 +9,28 @@ import {
   FlexboxGrid,
   IconButton,
 } from "rsuite";
-// import Picker from "emoji-picker-react";
-import { ItemsFilter, TodoListFilter } from "../types";
-import RightSide from "./RightSide";
-
-import MoreIcon from "@rsuite/icons/More";
-import {
-  List as TodoList,
-  ListItem as TodoListItem,
-} from "../../../components/list";
-import TodoIcon from "../../../components/list/ItemIcon";
-import { TodoState } from "../../../types/todo-list";
-import Star from "../../../icons/Star";
-import { ChangeTodoFilterHandler } from "../utils/useTodoListFilter";
-import ContextMenu from "../../../components/context-menu";
-import { pageView, todoList } from "../../../store";
-
-import { StyledContent, Title, ListContainer, StepsState } from "./styles";
 import { useTranslation } from "react-i18next";
+
+import EditableTitle from "components/editable-title";
+import { List as TodoList, ListItem as TodoListItem } from "components/list";
+import TodoIcon from "components/list/ItemIcon";
+import ContextMenu from "components/context-menu";
+
+import { pageView, todoList } from "store";
+
+import { TodoState } from "types/todo-list";
 import {
   TodoDefaultListGroup,
   TODO_DEFAULT_LIST_GROUP_VALUES,
-} from "../../../enums/todo-list";
-import EditableTitle from "../../../components/editable-title";
+} from "enums/todo-list";
+
+import { ItemsFilter, TodoListFilter } from "../types";
+import { ChangeTodoFilterHandler } from "../utils/useTodoListFilter";
+import RightSide from "./RightSide";
+import { StyledContent, Title, ListContainer, StepsState } from "./styles";
+
+import Star from "icons/Star";
+import MoreIcon from "@rsuite/icons/More";
 
 interface TodoListContentProps {
   filter: TodoListFilter;

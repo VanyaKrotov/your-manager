@@ -1,5 +1,7 @@
 import { observer } from "mobx-react";
-import PageContent from "../../../components/page-content";
+
+import PageContent from "components/page-content";
+
 import NotesContent from "../components/NotesContent";
 import NotesNavigation from "../components/NotesNavigation";
 import useNotesFilter from "../utils/useNotesFilter";

@@ -1,4 +1,4 @@
-import { TodoDefaultListGroup } from "../../enums/todo-list";
+import { TodoDefaultListGroup } from "enums/todo-list";
 
 export enum ItemsFilter {
   All,
