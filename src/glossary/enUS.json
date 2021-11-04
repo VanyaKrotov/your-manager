@@ -43,5 +43,9 @@
   "Add task": "Add task",
   "Loading": "Loading",
   "Save": "Save",
-  "Type": "Type"
+  "Type": "Type",
+  "Search": "Search",
+  "Error": "Error",
+  "Page not found": "Page not found",
+  "Global search": "Global search"
 }

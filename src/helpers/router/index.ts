@@ -1,6 +1,7 @@
 export const routes = {
   ROOT: "/",
   LOGIN: "/login",
+  SEARCH: "/search",
   REGISTRATION: "/registration",
   TODO_LIST: "/todo-list",
   NOTES: "/notes",

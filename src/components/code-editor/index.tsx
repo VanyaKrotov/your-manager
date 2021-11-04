@@ -37,11 +37,12 @@ const CodeEditor: FC<CodeEditorProps> = ({ content, onSave }) => {
         value: lang,
         label: lang,
       })),
-    [theme]
+    []
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onSaveContent = useCallback(
-    debounce((value: string) => onSave(value), 1000),
+    debounce((val: string) => onSave(val), 1000),
     [onSave]
   );
 

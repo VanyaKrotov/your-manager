@@ -6,6 +6,8 @@ import { Error404 } from "./service";
 
 import { TodoList } from "./todo-list";
 import { Notes } from "./notes";
+import { Passwords } from "./passwords";
+import { Search } from "./search";
 
 const Routes = () => (
   <Switch>
@@ -22,6 +24,10 @@ const Routes = () => (
     <Route exact path={routes.TODO_LIST} component={TodoList} />
 
     <Route exact path={routes.NOTES} component={Notes} />
+
+    <Route exact path={routes.PASSWORDS} component={Passwords} />
+
+    <Route exact path={routes.SEARCH} component={Search} />
 
     <Route path="*" component={Error404} />
   </Switch>

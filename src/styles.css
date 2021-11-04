@@ -195,3 +195,28 @@ time {
   background: transparent;
   border-radius: 5px;
 }
+
+.rs-sidenav-subtle .rs-dropdown.rs-dropdown-selected-within .rs-dropdown-toggle,
+.rs-sidenav-subtle .rs-sidenav-item.rs-sidenav-item-active::before {
+  content: " ";
+  position: absolute;
+  top: 10%;
+  width: 70%;
+  height: 70%;
+  background: var(--rs-primary-700);
+  left: 15%;
+  border-radius: 8px;
+  opacity: 0.3;
+  box-shadow: var(--rs-state-focus-shadow);
+}
+
+.rs-sidenav-subtle .rs-dropdown .rs-dropdown-toggle:focus,
+.rs-sidenav-subtle .rs-dropdown .rs-dropdown-toggle:hover,
+.rs-sidenav-subtle .rs-sidenav-item:focus,
+.rs-sidenav-subtle .rs-sidenav-item:hover {
+  box-shadow: none;
+}
+
+.m-b-20 {
+  margin-bottom: 20px;
+}

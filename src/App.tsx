@@ -12,14 +12,19 @@ import { observer } from "mobx-react-lite";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import TaskIcon from "@rsuite/icons/Task";
-import ParagraphIcon from "@rsuite/icons/Paragraph";
-import CharacterLockIcon from "@rsuite/icons/CharacterLock";
 import UserInfoIcon from "@rsuite/icons/UserInfo";
 import SettingIcon from "@rsuite/icons/Setting";
 import UserChangeIcon from "@rsuite/icons/UserChange";
 
+import TodoListIcon from "icons/todolist.svg";
+import NotesIcon from "icons/notes.svg";
+import PasswordsIcon from "icons/passwords.svg";
+import SearchIcon from "icons/search.svg";
+
 import { routes } from "helpers/router";
+
+import { Language, Theme } from "enums/page-view";
+
 import { pageView, user } from "store";
 import Routes from "pages";
 
@@ -33,7 +38,6 @@ import {
 import Moon from "icons/Moon";
 import Sun from "icons/Sun";
 import LanguageIcon from "icons/Language";
-import { Language, Theme } from "enums/page-view";
 
 import "rsuite/dist/rsuite.min.css";
 import "./styles.css";
@@ -97,8 +101,17 @@ const App = () => {
             <Sidenav.Body className="flex-column flex-auto">
               <Nav className="flex-auto" activeKey={pathname}>
                 <Nav.Item
+                  eventKey={routes.SEARCH}
+                  icon={<SearchIcon />}
+                  as={Link}
+                  to={routes.SEARCH}
+                >
+                  {t("Search")}
+                </Nav.Item>
+
+                <Nav.Item
                   eventKey={routes.TODO_LIST}
-                  icon={<TaskIcon />}
+                  icon={<TodoListIcon />}
                   as={Link}
                   to={routes.TODO_LIST}
                 >
@@ -107,7 +120,7 @@ const App = () => {
 
                 <Nav.Item
                   eventKey={routes.NOTES}
-                  icon={<ParagraphIcon />}
+                  icon={<NotesIcon />}
                   as={Link}
                   to={routes.NOTES}
                 >
@@ -116,7 +129,7 @@ const App = () => {
 
                 <Nav.Item
                   eventKey={routes.PASSWORDS}
-                  icon={<CharacterLockIcon />}
+                  icon={<PasswordsIcon />}
                   as={Link}
                   to={routes.PASSWORDS}
                 >
