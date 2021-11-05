@@ -67,6 +67,10 @@ time {
   color: var(--rs-text-secondary);
 }
 
+.w-100 {
+  width: 100px;
+}
+
 .w-200 {
   width: 200px;
 }
@@ -77,6 +81,14 @@ time {
 
 .w-300 {
   width: 300px;
+}
+
+.not-visible {
+  visibility: hidden;
+}
+
+.contents {
+  display: contents;
 }
 
 /* styled timymce */
@@ -217,6 +229,14 @@ time {
   box-shadow: none;
 }
 
+.m-l-10 {
+  margin-left: 10px;
+}
+
 .m-b-20 {
   margin-bottom: 20px;
+}
+
+.m-t-10 {
+  margin-top: 10px;
 }

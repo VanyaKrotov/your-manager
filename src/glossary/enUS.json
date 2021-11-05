@@ -2,6 +2,7 @@
   "Notes": "Notes",
   "Todo": "Todo",
   "Passwords": "Passwords",
+  "Password": "Password",
   "Settings": "Settings",
   "Light": "Light",
   "Dark": "Dark",
@@ -47,5 +48,14 @@
   "Search": "Search",
   "Error": "Error",
   "Page not found": "Page not found",
-  "Global search": "Global search"
+  "Global search": "Global search",
+  "Login": "Enter",
+  "Add user": "Add user",
+  "Login failed": "Failed to login. Wrong password!",
+  "last login": "last login",
+  "Username": "Username",
+  "Confirm password": "Confirm password",
+  "Secret key": "Secret key",
+  "Create new user": "Create new user",
+  "Create user": "Create user"
 }

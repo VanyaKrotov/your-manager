@@ -4,8 +4,6 @@ import { reaction } from "mobx";
 
 import { Language } from "enums/page-view";
 
-import UserModel from "models/user/UserModel";
-
 import UserStore from "./user";
 import NotesStore from "./notes";
 import PasswordStore from "./passwords";
@@ -14,9 +12,10 @@ import PageViewStore from "./page-view";
 
 import ru from "glossary/ru.json";
 import enUS from "glossary/enUS.json";
+import { DEFAULT_USER_ID } from "./user/constants";
 
 export const pageView = new PageViewStore();
-export const user = new UserStore();
+export const user = new UserStore(pageView.currentUserId);
 export const notes = new NotesStore(pageView.currentUserId);
 export const passwords = new PasswordStore();
 export const todoList = new TodoListStore(pageView.currentUserId);
@@ -38,19 +37,17 @@ i18n.use(initReactI18next).init({
 });
 
 reaction(
-  () => pageView.currentUserId,
-  async (userId) => {
-    const loadedUser = await UserModel.selectUserById(userId);
-
-    todoList.loadData(userId);
-
-    user.data = loadedUser;
-  }
+  () => pageView.language,
+  (lang) => i18n.changeLanguage(lang)
 );
 
 reaction(
-  () => pageView.language,
-  (lang) => i18n.changeLanguage(lang)
+  () => user.data,
+  (user) => {
+    if (pageView.currentUserId !== user?.id) {
+      pageView.currentUserId = user?.id || DEFAULT_USER_ID;
+    }
+  }
 );
 
 export { i18n };

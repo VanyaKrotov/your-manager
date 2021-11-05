@@ -8,6 +8,7 @@ import { TodoList } from "./todo-list";
 import { Notes } from "./notes";
 import { Passwords } from "./passwords";
 import { Search } from "./search";
+import { ChangeUser, Registration } from "./user";
 
 const Routes = () => (
   <Switch>
@@ -17,9 +18,9 @@ const Routes = () => (
       component={() => <Redirect to={routes.TODO_LIST} />}
     />
 
-    <Route exact path={routes.LOGIN} component={() => <div>1</div>} />
+    <Route exact path={routes.CHANGE_USER} component={ChangeUser} />
 
-    <Route exact path={routes.REGISTRATION} component={() => <div>1</div>} />
+    <Route exact path={routes.REGISTRATION} component={Registration} />
 
     <Route exact path={routes.TODO_LIST} component={TodoList} />
 

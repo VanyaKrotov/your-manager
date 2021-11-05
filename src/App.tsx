@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import {
   Container,
   Nav,
@@ -9,7 +9,7 @@ import {
 } from "rsuite";
 import { ruRU, enUS } from "rsuite/locales";
 import { observer } from "mobx-react-lite";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import UserInfoIcon from "@rsuite/icons/UserInfo";
@@ -43,13 +43,14 @@ import "rsuite/dist/rsuite.min.css";
 import "./styles.css";
 
 const App = () => {
-  const { pathname } = useLocation();
   const { language, theme } = pageView;
+  const { data } = user;
+
+  const history = useHistory();
+  const { pathname } = useLocation();
   const { t } = useTranslation();
 
   const onSelectOption = useCallback((key?: string) => {
-    console.log(key);
-
     if (!key) {
       return;
     }
@@ -67,6 +68,12 @@ const App = () => {
     () => (language === Language.Ru ? ruRU : enUS),
     [language]
   );
+
+  useEffect(() => {
+    if (!data) {
+      history.push(routes.CHANGE_USER);
+    }
+  }, [history, data]);
 
   return (
     <CustomProvider theme={theme} locale={locale}>
