@@ -45,7 +45,7 @@ reaction(
   () => user.data,
   (user) => {
     if (pageView.currentUserId !== user?.id) {
-      pageView.currentUserId = user?.id || DEFAULT_USER_ID;
+      pageView.changeCurrentUser(user?.id || DEFAULT_USER_ID);
     }
   }
 );

@@ -3,7 +3,7 @@ import { mapSqlResultToArray } from "helpers/mappers";
 
 import { Note } from "types/notes";
 
-import { modelInitRunner, sqlQuery } from "..";
+import { sqlQuery } from "..";
 
 class NoteModel {
   public static MODEL_NAME = "note_model";
@@ -75,7 +75,7 @@ class NoteModel {
       title,
       lastUpdate = new Date().getTime(),
       priority = false,
-      subType
+      subType,
     }: Partial<Omit<Note, "id" | "userId" | "dateCreated">>
   ) {
     const { result } = await sqlQuery(
@@ -99,7 +99,5 @@ class NoteModel {
     return result.rowsAffected > 0;
   }
 }
-
-modelInitRunner(NoteModel);
 
 export default NoteModel;

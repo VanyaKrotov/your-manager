@@ -6,6 +6,7 @@ import { TodoDefaultListGroup } from "enums/todo-list";
 
 import TodoGroupModel from "models/todo/TodoGroupModel";
 import TodoItemModel from "models/todo/TodoIteModel";
+import { modelInitRunner } from "models";
 
 interface ItemsMap {
   [key: string | number]: TodoItem[];
@@ -18,7 +19,7 @@ class TodoListStore {
   constructor(userId: number) {
     makeAutoObservable(this);
 
-    this.loadData(userId);
+    this.init(userId);
   }
 
   public get todoMap(): Record<number, TodoItem> {
@@ -51,6 +52,13 @@ class TodoListStore {
 
   public countItemsInGroup(groupId: number | TodoDefaultListGroup) {
     return this.itemsMapForGroups[groupId]?.length || 0;
+  }
+
+  private async init(userId: number) {
+    await modelInitRunner(TodoGroupModel);
+    await modelInitRunner(TodoItemModel);
+
+    this.loadData(userId);
   }
 
   public async loadData(userId: number) {

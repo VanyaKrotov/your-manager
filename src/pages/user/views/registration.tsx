@@ -2,26 +2,36 @@ import { FC, useCallback, useState } from "react";
 import { RouteComponentProps } from "react-router";
 import { Drawer, FlexboxGrid } from "rsuite";
 
-import { goBackOrDefault } from "helpers/router";
+import { routes } from "helpers/router";
 import { RegistrationForm } from "../forms";
 
 import AddUserIcon from "icons/add-user.svg";
 import { useTranslation } from "react-i18next";
-import { user } from "store";
+import { user, pageView } from "store";
 
 const Registration: FC<RouteComponentProps> = ({ history }) => {
   const [open, setOpen] = useState(true);
   const { t } = useTranslation();
 
-  const onClose = useCallback(() => setOpen(false), []);
+  const onClose = useCallback(() => {
+    if (!user.profiles.length) {
+      return;
+    }
 
-  const onExited = useCallback(() => goBackOrDefault(history), [history]);
+    setOpen(false);
+  }, []);
+
+  const onExited = useCallback(
+    () => history.replace(routes.CHANGE_USER),
+    [history]
+  );
 
   const onSubmit = useCallback(
     async (values) => {
       const result = await user.addUser(values);
 
       if (result) {
+        pageView.changeCurrentUser(result.id);
         onClose();
       }
     },

@@ -2,7 +2,7 @@ import { TodoItem } from "types/todo-list";
 
 import { mapSqlResultToArray } from "helpers/mappers";
 
-import { modelInitRunner, sqlQuery } from "..";
+import { sqlQuery } from "..";
 
 class TodoItemModel {
   public static MODEL_NAME = "todo_item_model";
@@ -142,7 +142,5 @@ class TodoItemModel {
     return result.rowsAffected > 0;
   }
 }
-
-modelInitRunner(TodoItemModel);
 
 export default TodoItemModel;

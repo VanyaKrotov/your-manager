@@ -1,6 +1,8 @@
 import { format, isToday, isYesterday } from "date-fns";
 import { makeAutoObservable } from "mobx";
 
+import { modelInitRunner } from "models";
+
 import { NoteType } from "enums/notes";
 import { Note } from "types/notes";
 import NoteModel from "models/note/NoteModel";
@@ -17,6 +19,8 @@ class NotesStore {
   }
 
   private async init(userId: number) {
+    await modelInitRunner(NoteModel);
+
     await this.loadItems(userId);
 
     if (this.todayItem) {
@@ -84,9 +88,7 @@ class NotesStore {
     this.rawItems = await NoteModel.selectAllByUserId(userId);
   }
 
-  public async addNote(
-    note: Pick<Note, "title" | "userId" | "type">
-  ) {
+  public async addNote(note: Pick<Note, "title" | "userId" | "type">) {
     const addedNote = await NoteModel.add(note);
 
     if (addedNote) {

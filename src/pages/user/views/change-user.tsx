@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { RouteComponentProps, Link } from "react-router-dom";
 import { Drawer, FlexboxGrid, IconButton } from "rsuite";
 import { observer } from "mobx-react-lite";
@@ -13,8 +13,11 @@ import CurrentUser from "../components/active-user";
 
 import AddUserIcon from "icons/add-user.svg";
 
-const ChangeUser: FC<RouteComponentProps> = ({ history }) => {
-  const { users } = user;
+const ChangeUser: FC<RouteComponentProps> = ({
+  history,
+  location: { search },
+}) => {
+  const { profiles, isEmptyProfiles } = user;
   const { currentUserId } = pageView;
 
   const [active, setActive] = useState(currentUserId);
@@ -23,8 +26,8 @@ const ChangeUser: FC<RouteComponentProps> = ({ history }) => {
   const { t } = useTranslation();
 
   const activeUser = useMemo(
-    () => users.find(({ id }) => id === active)!,
-    [users, active]
+    () => profiles.find(({ id }) => id === active)!,
+    [profiles, active]
   );
 
   const onClose = useCallback(() => {
@@ -36,6 +39,16 @@ const ChangeUser: FC<RouteComponentProps> = ({ history }) => {
   }, []);
 
   const onExited = useCallback(() => goBackOrDefault(history), [history]);
+
+  useEffect(() => {
+    setActive(currentUserId);
+  }, [currentUserId]);
+
+  useEffect(() => {
+    if (isEmptyProfiles) {
+      history.replace(routes.REGISTRATION);
+    }
+  }, [isEmptyProfiles, history]);
 
   return (
     <Drawer
@@ -50,7 +63,11 @@ const ChangeUser: FC<RouteComponentProps> = ({ history }) => {
           <FlexboxGrid.Item colspan={6} className="full-height">
             <FlexboxGrid className="full-height" align="bottom">
               <FlexboxGrid.Item>
-                <UserList users={users} active={active} onSelect={setActive} />
+                <UserList
+                  users={profiles}
+                  active={active}
+                  onSelect={setActive}
+                />
               </FlexboxGrid.Item>
             </FlexboxGrid>
           </FlexboxGrid.Item>

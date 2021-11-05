@@ -5,7 +5,7 @@ import { User, UserFull } from "types/user";
 
 import { DEFAULT_USERNAME } from "store/user/constants";
 
-import { modelInitRunner, sqlQuery } from "..";
+import { sqlQuery } from "..";
 import { mapSqlResultToArray } from "helpers/mappers";
 
 class UserModel {
@@ -85,11 +85,5 @@ class UserModel {
     return UserModel.selectUserById(userId);
   }
 }
-
-modelInitRunner(UserModel).then((initial) => {
-  if (initial) {
-    UserModel.add({});
-  }
-});
 
 export default UserModel;

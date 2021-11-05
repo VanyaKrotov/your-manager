@@ -7,9 +7,11 @@ import { User } from "types/user";
 import { DEFAULT_USERNAME, DEFAULT_USER_ID } from "./constants";
 import UserModel from "models/user/UserModel";
 import { RegistrationFormValue } from "pages/user/forms/registration";
+import { modelInitRunner } from "models";
 
 class UserStore {
-  public users: User[] = [];
+  public isLoaded = false;
+  public profiles: User[] = [];
   public data: User | null = null;
 
   constructor(userId: number) {
@@ -34,18 +36,25 @@ class UserStore {
     return this.data?.username || DEFAULT_USERNAME;
   }
 
+  public get isEmptyProfiles() {
+    return this.isLoaded && !this.profiles.length;
+  }
+
   private async loadUsers() {
-    this.users = await UserModel.selectAllUsers();
+    this.profiles = await UserModel.selectAllUsers();
+    this.isLoaded = true;
   }
 
   public async init(userId: number) {
+    await modelInitRunner(UserModel);
+
     await this.loadUsers();
   }
 
   public async login(userId: number, password?: string): Promise<User | null> {
-    const userIndex = this.users.findIndex(({ id }) => id === userId)!;
-    if (!password && !this.users[userIndex].hasPassword) {
-      this.data = this.users[userIndex];
+    const userIndex = this.profiles.findIndex(({ id }) => id === userId)!;
+    if (!password && !this.profiles[userIndex].hasPassword) {
+      this.data = this.profiles[userIndex];
 
       return this.data;
     }
@@ -57,7 +66,7 @@ class UserStore {
     }
 
     this.data = authResult;
-    this.users[userIndex] = authResult;
+    this.profiles[userIndex] = authResult;
 
     return authResult;
   }
@@ -66,7 +75,7 @@ class UserStore {
     username,
     password,
     secretKey,
-  }: RegistrationFormValue): Promise<boolean> {
+  }: RegistrationFormValue): Promise<User | null> {
     const result = await UserModel.add({
       username,
       password,
@@ -75,7 +84,7 @@ class UserStore {
 
     await this.loadUsers();
 
-    return Boolean(result);
+    return result;
   }
 }
 

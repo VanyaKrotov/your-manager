@@ -1,6 +1,8 @@
 import { ru, enUS } from "date-fns/locale";
 import { makeAutoObservable } from "mobx";
 
+import { routes } from "helpers/router";
+
 import { Language, Theme } from "enums/page-view";
 
 import { DEFAULT_USER_ID } from "../user/constants";
@@ -10,6 +12,7 @@ class PageViewStore {
   public language = Language.Ru;
   public theme = Theme.Dark;
   public currentUserId = DEFAULT_USER_ID;
+  public pagePath = { pathname: routes.ROOT, search: "" };
 
   constructor() {
     makeAutoObservable(this);
@@ -17,7 +20,23 @@ class PageViewStore {
     const savedSettingsJson = localStorage.getItem("page-settings");
 
     window.addEventListener("unload", () => {
-      localStorage.setItem("page-settings", JSON.stringify(this));
+      const { pathname, search } = window.location;
+      console.log(JSON.parse(JSON.stringify(window.location)))
+
+      localStorage.setItem(
+        "page-settings",
+        JSON.stringify(
+          Object.assign(
+            {
+              pagePath: {
+                pathname,
+                search,
+              },
+            },
+            this
+          )
+        )
+      );
     });
 
     if (savedSettingsJson === null) {
@@ -58,6 +77,10 @@ class PageViewStore {
   public changeLanguage = (lang: Language) => {
     this.language = lang;
   };
+
+  public changeCurrentUser(userId: number) {
+    this.currentUserId = userId;
+  }
 }
 
 export default PageViewStore;

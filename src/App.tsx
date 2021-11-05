@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import {
   Container,
   Nav,
@@ -9,7 +9,7 @@ import {
 } from "rsuite";
 import { ruRU, enUS } from "rsuite/locales";
 import { observer } from "mobx-react-lite";
-import { Link, useLocation, useHistory } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import UserInfoIcon from "@rsuite/icons/UserInfo";
@@ -44,11 +44,12 @@ import "./styles.css";
 
 const App = () => {
   const { language, theme } = pageView;
-  const { data } = user;
+  const { authorized } = user;
 
-  const history = useHistory();
   const { pathname } = useLocation();
   const { t } = useTranslation();
+
+  console.log(pathname);
 
   const onSelectOption = useCallback((key?: string) => {
     if (!key) {
@@ -68,12 +69,6 @@ const App = () => {
     () => (language === Language.Ru ? ruRU : enUS),
     [language]
   );
-
-  useEffect(() => {
-    if (!data) {
-      history.push(routes.CHANGE_USER);
-    }
-  }, [history, data]);
 
   return (
     <CustomProvider theme={theme} locale={locale}>
@@ -210,7 +205,7 @@ const App = () => {
         </StyledSidebar>
 
         <Container>
-          <Routes />
+          <Routes authorized={authorized} />
         </Container>
       </Container>
     </CustomProvider>

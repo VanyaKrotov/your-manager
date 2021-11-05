@@ -2,7 +2,7 @@ import { mapSqlResultToArray } from "helpers/mappers";
 
 import { TodoGroup } from "types/todo-list";
 
-import { modelInitRunner, sqlQuery } from "..";
+import { sqlQuery } from "..";
 
 import TodoItemModel from "./TodoIteModel";
 
@@ -71,7 +71,5 @@ class TodoGroupModel {
     );
   }
 }
-
-modelInitRunner(TodoGroupModel);
 
 export default TodoGroupModel;
