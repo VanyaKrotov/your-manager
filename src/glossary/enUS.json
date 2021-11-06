@@ -50,12 +50,18 @@
   "Page not found": "Page not found",
   "Global search": "Global search",
   "Login": "Enter",
-  "Add user": "Add user",
+  "Add profile": "Add profile",
   "Login failed": "Failed to login. Wrong password!",
   "last login": "last login",
   "Username": "Username",
   "Confirm password": "Confirm password",
   "Secret key": "Secret key",
-  "Create new user": "Create new user",
-  "Create user": "Create user"
+  "Create new profile": "Create new profile",
+  "Create profile": "Create profile",
+  "All data encoded": "All data except the username will be encrypted",
+  "Username is required field": "Username is required field",
+  "Password must have minimum 8 chars": "Password must have minimum 8 chars",
+  "Password mismatch": "Password mismatch",
+  "Secret key is required field": "Secret key is required field",
+  "Secret key must have minimum 10 chars": "Secret key must have minimum 10 chars"
 }

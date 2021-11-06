@@ -55,7 +55,7 @@ const Registration: FC<RouteComponentProps> = ({ history }) => {
                   <AddUserIcon />
                 </FlexboxGrid.Item>
                 <FlexboxGrid.Item className="m-l-10">
-                  {t("Create new user")}
+                  {t("Create new profile")}
                 </FlexboxGrid.Item>
               </FlexboxGrid>
             </h3>

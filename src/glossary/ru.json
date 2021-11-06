@@ -50,12 +50,18 @@
   "Page not found": "Страница не найдена",
   "Global search": "Глобальный поиск",
   "Login": "Войти",
-  "Add user": "Добавить пользователя",
+  "Add profile": "Добавить профиль",
   "Login failed": "Не удалось войти. Пароль не верный!",
-  "last login": "последний вход",
+  "last login": "последняя активность",
   "Username": "Имя пользователя",
   "Confirm password": "Подтверждение пароля",
   "Secret key": "Секретный ключ",
-  "Create new user": "Создать нового пользователя",
-  "Create user": "Создать пользователя"
+  "Create new profile": "Создание профиля",
+  "Create profile": "Создать профиль",
+  "All data encoded": "Все данные кроме имени будут зашифрованы",
+  "Username is required field": "Имя пользователя - обязательное поле",
+  "Password must have minimum 8 chars": "Пароль должен состоять минимум из 8 символов",
+  "Password mismatch": "Пароли не совпадают",
+  "Secret key is required field": "Секретный ключ - обязательное поле",
+  "Secret key must have minimum 10 chars": "Секретный ключ должен содержать не менее 10 символов"
 }

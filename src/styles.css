@@ -181,6 +181,14 @@ time {
   vertical-align: middle;
 }
 
+.warning-color {
+  color: var(--rs-orange-700);
+}
+
+.remove-close-button > button:first-of-type {
+  display: none;
+}
+
 .reset-margin {
   margin: 0;
 }
@@ -235,6 +243,10 @@ time {
 
 .m-b-20 {
   margin-bottom: 20px;
+}
+
+.m-b-10 {
+  margin-bottom: 10px;
 }
 
 .m-t-10 {

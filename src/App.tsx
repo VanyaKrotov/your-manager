@@ -49,8 +49,6 @@ const App = () => {
   const { pathname } = useLocation();
   const { t } = useTranslation();
 
-  console.log(pathname);
-
   const onSelectOption = useCallback((key?: string) => {
     if (!key) {
       return;

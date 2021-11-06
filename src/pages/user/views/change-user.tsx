@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { RouteComponentProps, Link } from "react-router-dom";
-import { Drawer, FlexboxGrid, IconButton } from "rsuite";
+import { Drawer, FlexboxGrid } from "rsuite";
 import { observer } from "mobx-react-lite";
 import { useTranslation } from "react-i18next";
 
@@ -11,12 +11,7 @@ import { pageView, user } from "store";
 import UserList from "../components/user-list";
 import CurrentUser from "../components/active-user";
 
-import AddUserIcon from "icons/add-user.svg";
-
-const ChangeUser: FC<RouteComponentProps> = ({
-  history,
-  location: { search },
-}) => {
+const ChangeUser: FC<RouteComponentProps> = ({ history }) => {
   const { profiles, isEmptyProfiles } = user;
   const { currentUserId } = pageView;
 
@@ -85,12 +80,10 @@ const ChangeUser: FC<RouteComponentProps> = ({
             </FlexboxGrid>
           </FlexboxGrid.Item>
           <FlexboxGrid.Item colspan={6} className="full-height">
-            <FlexboxGrid justify="end">
-              <FlexboxGrid.Item>
-                <Link to={routes.REGISTRATION}>
-                  <IconButton appearance="subtle" icon={<AddUserIcon />}>
-                    {t("Add user")}
-                  </IconButton>
+            <FlexboxGrid justify="end" align="bottom" className="full-height">
+              <FlexboxGrid.Item className="m-b-10">
+                <Link replace to={routes.REGISTRATION}>
+                  {t("Add profile")}
                 </Link>
               </FlexboxGrid.Item>
             </FlexboxGrid>
