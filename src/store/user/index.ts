@@ -12,6 +12,7 @@ import { modelInitRunner } from "models";
 class UserStore {
   public isLoaded = false;
   public profiles: User[] = [];
+  public sessionPrivateKey: string | null = null;
   public data: User | null = null;
 
   constructor(userId: number) {
@@ -38,6 +39,10 @@ class UserStore {
 
   public get isEmptyProfiles() {
     return this.isLoaded && !this.profiles.length;
+  }
+
+  public changeSessionPrivateKey(key: string | null) {
+    this.sessionPrivateKey = key;
   }
 
   private async loadUsers() {

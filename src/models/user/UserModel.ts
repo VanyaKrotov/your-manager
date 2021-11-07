@@ -42,7 +42,7 @@ class UserModel {
 
   public static async selectUserById(userId: number): Promise<User | null> {
     const { result } = await sqlQuery(
-      `SELECT id, username, settings, password, lastLogin FROM ${this.MODEL_NAME} WHERE id = ?`,
+      `SELECT id, username, settings, password, lastLogin, privateKey FROM ${this.MODEL_NAME} WHERE id = ?`,
       [userId]
     );
 
@@ -58,7 +58,7 @@ class UserModel {
 
   public static async selectAllUsers(): Promise<User[]> {
     const { result } = await sqlQuery(
-      `SELECT id, username, settings, lastLogin, password FROM ${this.MODEL_NAME}`
+      `SELECT id, username, settings, lastLogin, password, privateKey FROM ${this.MODEL_NAME}`
     );
 
     return mapSqlResultToArray(result).map(({ password, ...rest }) => ({

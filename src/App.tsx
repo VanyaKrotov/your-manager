@@ -25,6 +25,8 @@ import { routes } from "helpers/router";
 
 import { Language, Theme } from "enums/page-view";
 
+import { PasswordConfirmation } from "modals";
+
 import { pageView, user } from "store";
 import Routes from "pages";
 
@@ -71,6 +73,7 @@ const App = () => {
   return (
     <CustomProvider theme={theme} locale={locale}>
       <Container>
+        <PasswordConfirmation />
         <StyledSidebar
           // width={pageView.expandedSideBar ? 220 : 56}
           width={56}

@@ -25,13 +25,16 @@ body.rs-theme-dark {
   --ym-list-bg: #1a1d24;
   --ym-list-bg-hover: #292d33;
   --ym-list-bg-active: #282b2e;
+  --ym-table-header: rgba(60, 63, 67, 0.2);
 }
 
 body.rs-theme-light {
   --ym-list-bg: #efefef;
-
   --ym-list-bg-hover: #dddddd;
   --ym-list-bg-active: #dbdbdb;
+
+  /* TODO */
+  --ym-table-header: rgba(60, 63, 67, 0.1);
 }
 
 /* TODO */
@@ -64,6 +67,13 @@ body {
 time {
   font-size: 12px;
   line-height: 14px;
+  color: var(--rs-text-secondary);
+}
+
+.domain {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+  line-height: 16px;
   color: var(--rs-text-secondary);
 }
 
@@ -147,6 +157,16 @@ time {
   padding: 10px;
 }
 
+.p-tb-20 {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.p-lr-10 {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 .b-top {
   border-top: 1px solid var(--rs-divider-border);
 }
@@ -158,6 +178,10 @@ time {
 .icon-14 {
   height: 14px !important;
   width: auto;
+}
+
+.w-50p {
+  width: 50%;
 }
 
 .delete-button:not([aria-disabled="true"]),
@@ -220,7 +244,7 @@ time {
 .rs-sidenav-subtle .rs-sidenav-item.rs-sidenav-item-active::before {
   content: " ";
   position: absolute;
-  top: 10%;
+  top: 11%;
   width: 70%;
   height: 70%;
   background: var(--rs-primary-700);
@@ -236,9 +260,30 @@ time {
 .rs-sidenav-subtle .rs-sidenav-item:hover {
   box-shadow: none;
 }
+.rs-input-group:not(.rs-input-group-inside)
+  .rs-auto-complete:first-child
+  .rs-input,
+.rs-input-group:not(.rs-input-group-inside)
+  .rs-form-control-wrapper:first-child
+  > .rs-input,
+.rs-input-group:not(.rs-input-group-inside)
+  .rs-picker-date:first-child
+  .rs-picker-toggle,
+.rs-input-group:not(.rs-input-group-inside) > :first-child {
+  border-bottom-left-radius: 4px;
+  border-top-left-radius: 4px;
+}
+
+.m-20 {
+  margin: 20px;
+}
 
 .m-l-10 {
   margin-left: 10px;
+}
+
+.m-r-10 {
+  margin-right: 10px;
 }
 
 .m-b-20 {
@@ -251,4 +296,20 @@ time {
 
 .m-t-10 {
   margin-top: 10px;
+}
+
+.custom-checkbox .rs-checkbox-checker {
+  padding: 0;
+  min-height: auto;
+}
+
+.custom-checkbox .rs-checkbox-wrapper {
+  position: inherit;
+}
+
+.custom-checkbox .rs-checkbox-wrapper:after {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }

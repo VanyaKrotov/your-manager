@@ -6,6 +6,7 @@ import { routes } from "helpers/router";
 import { Language, Theme } from "enums/page-view";
 
 import { DEFAULT_USER_ID } from "../user/constants";
+import { PasswordGenerateOptions } from "enums/passwords";
 
 class PageViewStore {
   public expandedSideBar = false;
@@ -13,6 +14,15 @@ class PageViewStore {
   public theme = Theme.Dark;
   public currentUserId = DEFAULT_USER_ID;
   public pagePath = { pathname: routes.ROOT, search: "" };
+  public generateOptions = {
+    length: 8,
+    generate: [
+      PasswordGenerateOptions.Numbers,
+      PasswordGenerateOptions.Symbols,
+      PasswordGenerateOptions.Lowercase,
+      PasswordGenerateOptions.Uppercase,
+    ],
+  };
 
   constructor() {
     makeAutoObservable(this);
@@ -21,7 +31,7 @@ class PageViewStore {
 
     window.addEventListener("unload", () => {
       const { pathname, search } = window.location;
-      console.log(JSON.parse(JSON.stringify(window.location)))
+      console.log(JSON.parse(JSON.stringify(window.location)));
 
       localStorage.setItem(
         "page-settings",
@@ -66,6 +76,18 @@ class PageViewStore {
     };
   }
 
+  public get generateFnOptions() {
+    const { length, generate } = this.generateOptions;
+
+    return {
+      length,
+      numbers: generate.includes(PasswordGenerateOptions.Numbers),
+      symbols: generate.includes(PasswordGenerateOptions.Symbols),
+      lowercase: generate.includes(PasswordGenerateOptions.Lowercase),
+      uppercase: generate.includes(PasswordGenerateOptions.Uppercase),
+    };
+  }
+
   public toggleExpanded = () => {
     this.expandedSideBar = !this.expandedSideBar;
   };
@@ -80,6 +102,10 @@ class PageViewStore {
 
   public changeCurrentUser(userId: number) {
     this.currentUserId = userId;
+  }
+
+  public changeGenerateOptions(value: Record<string, any>) {
+    this.generateOptions = Object.assign(this.generateOptions, value);
   }
 }
 

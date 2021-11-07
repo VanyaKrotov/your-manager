@@ -23,19 +23,19 @@ const Routes: FC<RouterProps> = ({ authorized }) => (
 
     {authorized ? (
       [
-        <Route exact path={routes.ROOT}>
+        <Route exact path={routes.ROOT} key={1}>
           <Redirect to={routes.TODO_LIST} />
         </Route>,
 
-        <Route exact path={routes.TODO_LIST} component={TodoList} />,
+        <Route exact path={routes.TODO_LIST} component={TodoList} key={2} />,
 
-        <Route exact path={routes.NOTES} component={Notes} />,
+        <Route exact path={routes.NOTES} component={Notes} key={3} />,
 
-        <Route exact path={routes.PASSWORDS} component={Passwords} />,
+        <Route exact path={routes.PASSWORDS} component={Passwords} key={4} />,
 
-        <Route exact path={routes.SEARCH} component={Search} />,
+        <Route exact path={routes.SEARCH} component={Search} key={5} />,
 
-        <Route path="*" component={Error404} />,
+        <Route path="*" component={Error404} key={6} />,
       ]
     ) : (
       <Route path="*">
