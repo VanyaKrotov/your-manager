@@ -1,45 +1,48 @@
 import { FC } from "react";
-
 import { Password } from "types/passwords";
 
 import TableRow from "./TableRow";
 
-interface TableBodyProps {}
+import { EmptyContainer } from "./styles";
+import { useTranslation } from "react-i18next";
 
-const TableBody: FC<TableBodyProps> = ({}) => {
-  const items: Password[] = [
-    {
-      id: 1,
-      title: "passwords 1",
-      userId: 1,
-      username: "Ivan",
-      password: "slkdjas;lkdjlkasjdlkajslkdjalksjdlkasd",
-      dateCreated: new Date().getTime(),
-      lastOpened: null,
-      lastUpdated: null,
-      groupId: 2,
-      description: "aslkdjaslkdjlaskjdlaksjdlkas",
-      domain: "domain",
-    },
-    {
-      id: 2,
-      title: "passwords 2",
-      userId: 1,
-      username: "Ivan",
-      password: "slkdjas;lkdjlkasjdlkajslkdjalksjdlkasd",
-      dateCreated: new Date().getTime(),
-      lastOpened: null,
-      lastUpdated: null,
-      groupId: 2,
-      description: "aslkdjaslkdjlaskjdlaksjdlkas",
-      domain: "domain",
-    },
-  ];
+interface TableBodyProps {
+  active: number;
+  items: Password[];
+  selectedRows: number[];
+  onEdit: (value: number) => void;
+  changeActiveRow: (active: number) => void;
+  onSelect: (id: number) => void;
+}
+
+const TableBody: FC<TableBodyProps> = ({
+  changeActiveRow,
+  items,
+  selectedRows,
+  onSelect,
+  onEdit,
+}) => {
+  const { t } = useTranslation();
+
+  if (!items.length) {
+    return (
+      <EmptyContainer>
+        <p>{t("Empty data")}</p>
+      </EmptyContainer>
+    );
+  }
 
   return (
     <>
       {items.map((item) => (
-        <TableRow data={item} key={item.id} />
+        <TableRow
+          data={item}
+          key={item.id}
+          onEdit={() => onEdit(item.id)}
+          selected={selectedRows.includes(item.id)}
+          onSelect={onSelect}
+          onClick={() => changeActiveRow(item.id)}
+        />
       ))}
     </>
   );

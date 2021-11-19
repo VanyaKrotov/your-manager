@@ -10,7 +10,7 @@ const PageContent: FC<PageContentProps> = ({ navigation, children }) => (
   <Content>
     {navigation ? (
       <FlexboxGrid className="full-height">
-        <FlexboxGrid.Item className="full-height b-right" colspan={4}>
+        <FlexboxGrid.Item className="full-height" colspan={4}>
           {navigation}
         </FlexboxGrid.Item>
         <FlexboxGrid.Item colspan={20} className="full-height">{children}</FlexboxGrid.Item>

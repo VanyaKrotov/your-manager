@@ -5,5 +5,14 @@
     "displayName": "application_db",
     "size": 67108864
   },
-  "tinyApiKey": "h2ps8ccvj3t4e98qpki5xmwr5t231obaasu695wqqic4wyy7"
+  "tinyApiKey": "h2ps8ccvj3t4e98qpki5xmwr5t231obaasu695wqqic4wyy7",
+  "firebase": {
+    "apiKey": "AIzaSyDN0t-tc0C1vIlHO0ECyU7mkRQ3CfP0SA4",
+    "authDomain": "your-manager-ff4f0.firebaseapp.com",
+    "projectId": "your-manager-ff4f0",
+    "storageBucket": "your-manager-ff4f0.appspot.com",
+    "messagingSenderId": "143582926206",
+    "appId": "1:143582926206:web:8a425b1ec41f8a2c174f2f",
+    "measurementId": "G-78PY970V7M"
+  }
 }

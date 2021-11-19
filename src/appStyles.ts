@@ -21,7 +21,6 @@ export const LogoTitle = styled.span`
 
 export const StyledSidebar = styled(Sidebar)`
   position: relative;
-  border-right: 1px solid var(--rs-divider-border);
 `;
 
 export const TogglerButton = styled(IconButton)`

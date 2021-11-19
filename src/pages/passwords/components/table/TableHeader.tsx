@@ -1,32 +1,47 @@
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { Checkbox } from "rsuite";
 
 import { HeaderContainer, TableHeaderItem } from "./styles";
 
-interface TableHeaderProps {}
+interface TableHeaderProps {
+  isAllSelected: boolean;
+  onChangeAllSelected: (value: unknown) => void;
+}
 
-const TableHeader: FC<TableHeaderProps> = ({}) => {
+const TableHeader: FC<TableHeaderProps> = ({
+  isAllSelected,
+  onChangeAllSelected,
+}) => {
+  const { t } = useTranslation();
+
   return (
     <HeaderContainer>
       <TableHeaderItem xs={1} sm={1} md={1} lg={1} className="flex-block">
-        <Checkbox className="custom-checkbox"/>
+        <Checkbox
+          className="custom-checkbox"
+          checked={isAllSelected}
+          onChange={onChangeAllSelected}
+        />
       </TableHeaderItem>
       <TableHeaderItem xs={4} sm={4} md={4} lg={4}>
-        Title
+        {t("Title")}
       </TableHeaderItem>
       <TableHeaderItem xs={4} sm={4} md={4} lg={5}>
-        username
+        {t("Username")}
       </TableHeaderItem>
       <TableHeaderItem xs={3} sm={4} md={4} lg={4}>
-        domain
+        {t("Domain")}
       </TableHeaderItem>
       <TableHeaderItem xs={4} sm={4} md={5} lg={5}>
-        password
+        {t("Password")}
       </TableHeaderItem>
       <TableHeaderItem xs={4} sm={3} md={3} lg={3}>
-        group
+        {t("Group")}
       </TableHeaderItem>
-      <TableHeaderItem xs={4} sm={4} md={3} lg={2}></TableHeaderItem>
+      <TableHeaderItem xs={4} sm={4} md={3} lg={2} className="align-right">
+        {t("Actions")}
+      </TableHeaderItem>
     </HeaderContainer>
   );
 };

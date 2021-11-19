@@ -25,3 +25,37 @@ export const CopyInput = styled(Input)`
     box-shadow: none;
   }
 `;
+
+export const Section = styled.section`
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  :not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  &[data-block] {
+    display: inline-block;
+  }
+`;
+
+export const SectionTitle = styled.div`
+  margin-bottom: 10px;
+  margin-right: 10px;
+  font-size: 15px;
+  color: var(--rs-text-disabled);
+`;
+
+export const SectionContent = styled.div`
+  margin-bottom: 7px;
+  width: 60%;
+
+  &[data-inline] {
+    margin-bottom: 10px;
+  }
+
+  &[data-full-width] {
+    width: 100%;
+  }
+`;

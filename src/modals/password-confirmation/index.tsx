@@ -17,24 +17,27 @@ const PasswordConfirmation = () => {
     reject();
   }, [reject]);
 
-  const onSubmitHandler = useCallback((valid, event) => {
-    if (!valid) {
-      return;
-    }
+  const onSubmitHandler = useCallback(
+    (valid, event) => {
+      if (!valid) {
+        return;
+      }
 
-    const key = event.target.privateKey.value;
-    if (data?.privateKey !== SHA256(key).toString()) {
-      return;
-    }
+      const key = event.target.privateKey.value;
+      if (data?.privateKey !== SHA256(key).toString()) {
+        return;
+      }
 
-    resolve(key);
-    modals.close(ModalType.PrivateKeyConfirm);
+      resolve(key);
+      modals.close(ModalType.PrivateKeyConfirm);
 
-    const saved = event.target.savedKey.checked;
-    if (saved) {
-      user.changeSessionPrivateKey(key);
-    }
-  }, []);
+      const saved = event.target.savedKey.checked;
+      if (saved) {
+        user.changeSessionPrivateKey(key);
+      }
+    },
+    [data?.privateKey, resolve]
+  );
 
   return (
     <Modal open={open} role="alertdialog" size="xs" backdrop="static">

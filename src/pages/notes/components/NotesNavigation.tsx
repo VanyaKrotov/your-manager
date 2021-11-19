@@ -16,12 +16,12 @@ import { NotesFilter } from "../types";
 import Star from "icons/Star";
 import TrashIcon from "@rsuite/icons/Trash";
 import TextImageIcon from "@rsuite/icons/TextImage";
+import { PanelContainer } from "components/panels";
 
 const StyledList = styled(List)`
   & + .add-control {
     border-radius: 0;
-    background: transparent;
-    border-top: 1px solid var(--rs-divider-border);
+    background: var(--ym-bg-200);
   }
 `;
 
@@ -92,7 +92,7 @@ const NotesNavigation: FC<NotesNavigationProps> = ({
   }, [todayItem, changeFilter, active]);
 
   return (
-    <div className="screen-height">
+    <PanelContainer data-layer="2" className="screen-height">
       <ContextMenu items={contextMenuItems} id="notes-context" />
       <StyledList
         onAddItem={onAddNote}
@@ -131,7 +131,7 @@ const NotesNavigation: FC<NotesNavigationProps> = ({
           </ListItem>
         ))}
       </StyledList>
-    </div>
+    </PanelContainer>
   );
 };
 

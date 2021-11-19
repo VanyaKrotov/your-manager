@@ -63,7 +63,7 @@ export const ListItem = styled(List.Item)`
   }
 
   &[data-active="true"] {
-    background: var(--ym-list-bg-active);
+    background: var(--ym-primary-light);
     color: var(--rs-primary-700);
     font-weight: bold;
   }
@@ -99,6 +99,11 @@ export const AddItemContainer = styled.div`
 
   & > div > div:last-child {
     width: calc(100% - 20px);
+  }
+
+  &[data-active="true"] {
+    background: var(--ym-primary-light);
+    color: var(--rs-primary-700);
   }
 `;
 

@@ -1,3 +1,4 @@
+import { stopPropagationHandler } from "helpers/common";
 import { Col, Grid, Row } from "rsuite";
 import styled from "styled-components";
 
@@ -18,6 +19,7 @@ export const TableHeaderItem = styled(Col)`
 
 export const TableRow = styled(HeaderContainer)`
   margin-bottom: 0px;
+  cursor: pointer;
 
   &:not(:first-child) {
     margin-top: 10px;
@@ -35,4 +37,17 @@ export const TableCol = styled(Col)`
   }
 `;
 
+export const StopPropTableCol = styled(TableCol).attrs({
+  onClick: stopPropagationHandler,
+})``;
+
 export const BodyContainer = styled.div``;
+
+export const EmptyContainer = styled.div.attrs({ className: "flex-center" })`
+  height: 400px;
+
+  & > p {
+    font-size: 16px;
+    line-height: 20px;
+  }
+`;

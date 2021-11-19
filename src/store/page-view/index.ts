@@ -7,13 +7,27 @@ import { Language, Theme } from "enums/page-view";
 
 import { DEFAULT_USER_ID } from "../user/constants";
 import { PasswordGenerateOptions } from "enums/passwords";
+import { Password } from "types/passwords";
 
 class PageViewStore {
   public expandedSideBar = false;
+
   public language = Language.Ru;
+
   public theme = Theme.Dark;
+
   public currentUserId = DEFAULT_USER_ID;
+
+  public isMaximizeWindow = false;
+
   public pagePath = { pathname: routes.ROOT, search: "" };
+
+  public passwordsSearchOptions: Array<keyof Password> = [
+    "title",
+    "domain",
+    "username",
+  ];
+
   public generateOptions = {
     length: 8,
     generate: [
@@ -107,6 +121,14 @@ class PageViewStore {
   public changeGenerateOptions(value: Record<string, any>) {
     this.generateOptions = Object.assign(this.generateOptions, value);
   }
+
+  public changIisMaximizeWindow(value: boolean) {
+    this.isMaximizeWindow = value;
+  }
+
+  public changePasswordsSearchOptions = (values: unknown[]) => {
+    this.passwordsSearchOptions = values as Array<keyof Password>;
+  };
 }
 
 export default PageViewStore;

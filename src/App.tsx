@@ -1,12 +1,5 @@
 import { useCallback, useMemo } from "react";
-import {
-  Container,
-  Nav,
-  Sidenav,
-  CustomProvider,
-  FlexboxGrid,
-  Dropdown,
-} from "rsuite";
+import { Container, Nav, Sidenav, CustomProvider, Dropdown } from "rsuite";
 import { ruRU, enUS } from "rsuite/locales";
 import { observer } from "mobx-react-lite";
 import { Link, useLocation } from "react-router-dom";
@@ -19,24 +12,21 @@ import UserChangeIcon from "@rsuite/icons/UserChange";
 import TodoListIcon from "icons/todolist.svg";
 import NotesIcon from "icons/notes.svg";
 import PasswordsIcon from "icons/passwords.svg";
-import SearchIcon from "icons/search.svg";
+// import SearchIcon from "icons/search.svg";
 
 import { routes } from "helpers/router";
 
 import { Language, Theme } from "enums/page-view";
+import { isElectron } from "definition";
 
 import { PasswordConfirmation } from "modals";
+
+import { TitleGlobalStyle } from "title-bar";
 
 import { pageView, user } from "store";
 import Routes from "pages";
 
-import {
-  LogoContainer,
-  LogoTitle,
-  StyledSidebar,
-  UserAvatar,
-  UserTitle,
-} from "./appStyles";
+import { StyledSidebar, UserAvatar, UserTitle } from "./appStyles";
 import Moon from "icons/Moon";
 import Sun from "icons/Sun";
 import LanguageIcon from "icons/Language";
@@ -72,45 +62,25 @@ const App = () => {
 
   return (
     <CustomProvider theme={theme} locale={locale}>
+      {isElectron && <TitleGlobalStyle />}
       <Container>
         <PasswordConfirmation />
-        <StyledSidebar
-          // width={pageView.expandedSideBar ? 220 : 56}
-          width={56}
-          collapsible
-          className="flex-column"
-        >
-          <Sidenav.Header>
-            <LogoContainer>
-              <FlexboxGrid align="middle">
-                <FlexboxGrid.Item>
-                  <div className="logo">
-                    <span>YM</span>
-                  </div>
-                </FlexboxGrid.Item>
-                <FlexboxGrid.Item>
-                  <LogoTitle data-expanded={pageView.expandedSideBar}>
-                    You manager
-                  </LogoTitle>
-                </FlexboxGrid.Item>
-              </FlexboxGrid>
-            </LogoContainer>
-          </Sidenav.Header>
+        <StyledSidebar width={56} collapsible className="flex-column">
           <Sidenav
             className="flex-column flex-auto"
             expanded={pageView.expandedSideBar}
-            appearance="subtle"
+            appearance="default"
           >
             <Sidenav.Body className="flex-column flex-auto">
               <Nav className="flex-auto" activeKey={pathname}>
-                <Nav.Item
+                {/* <Nav.Item
                   eventKey={routes.SEARCH}
                   icon={<SearchIcon />}
                   as={Link}
                   to={routes.SEARCH}
                 >
                   {t("Search")}
-                </Nav.Item>
+                </Nav.Item> */}
 
                 <Nav.Item
                   eventKey={routes.TODO_LIST}

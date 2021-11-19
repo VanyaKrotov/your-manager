@@ -8,6 +8,7 @@ import EditableTitle from "components/editable-title";
 import TodoIcon from "components/list/ItemIcon";
 import { List, ListItem } from "components/list";
 
+import { isElectron } from "definition";
 import { pageView, todoList } from "store";
 
 import { TodoState } from "types/todo-list";
@@ -18,14 +19,11 @@ import Star from "icons/Star";
 import CloseIcon from "@rsuite/icons/Close";
 import ArrowRightIcon from "@rsuite/icons/ArrowRight";
 import TrashIcon from "@rsuite/icons/Trash";
-
-const Container = styled.div`
-  height: 100vh;
-  border-left: 1px solid var(--rs-divider-border);
-`;
+import { TITLE_BAR_HEIGHT } from "title-bar/constants";
+import { PanelBottomControl, PanelContainer } from "components/panels";
 
 const ScrollContainer = styled.div`
-  height: calc(100vh - 56px);
+  height: calc(100vh - ${isElectron ? TITLE_BAR_HEIGHT : 0}px - 56px);
   overflow-y: auto;
   padding: 15px;
 `;
@@ -153,7 +151,7 @@ const RightSide: FC<RightSideProps> = ({
   const isDone = state === TodoState.Done;
 
   return (
-    <Container>
+    <PanelContainer data-layer="1">
       <ScrollContainer>
         <TitleContainer>
           <span
@@ -225,41 +223,47 @@ const RightSide: FC<RightSideProps> = ({
         />
       </ScrollContainer>
 
-      <FlexboxGrid
-        className="full-width p-10 b-top"
-        align="middle"
-        justify="space-between"
-      >
-        <FlexboxGrid.Item>
-          <IconButton
-            icon={<ArrowRightIcon />}
-            appearance="subtle"
-            onClick={onClose}
-            title={t("Close frame")}
-          />
-        </FlexboxGrid.Item>
-        <FlexboxGrid.Item className="align-center">
-          {lastChanged
-            ? `${t("last changed")} ${formatDistance(lastChanged!, new Date(), {
-                includeSeconds: true,
-                ...pageView.formatOptions,
-              })} ${t("ago")}`
-            : t("Not updated")}
-        </FlexboxGrid.Item>
-        <FlexboxGrid.Item>
-          <IconButton
-            onClick={() => {
-              onClose();
-              todoList.removeItem(selectedId);
-            }}
-            className="delete-button"
-            icon={<TrashIcon />}
-            appearance="subtle"
-            title={t("Delete task")}
-          />
-        </FlexboxGrid.Item>
-      </FlexboxGrid>
-    </Container>
+      <PanelBottomControl>
+        <FlexboxGrid
+          className="p-10"
+          align="middle"
+          justify="space-between"
+        >
+          <FlexboxGrid.Item>
+            <IconButton
+              icon={<ArrowRightIcon />}
+              appearance="subtle"
+              onClick={onClose}
+              title={t("Close frame")}
+            />
+          </FlexboxGrid.Item>
+          <FlexboxGrid.Item className="align-center">
+            {lastChanged
+              ? `${t("last changed")} ${formatDistance(
+                  lastChanged!,
+                  new Date(),
+                  {
+                    includeSeconds: true,
+                    ...pageView.formatOptions,
+                  }
+                )} ${t("ago")}`
+              : t("Not updated")}
+          </FlexboxGrid.Item>
+          <FlexboxGrid.Item>
+            <IconButton
+              onClick={() => {
+                onClose();
+                todoList.removeItem(selectedId);
+              }}
+              className="delete-button"
+              icon={<TrashIcon />}
+              appearance="subtle"
+              title={t("Delete task")}
+            />
+          </FlexboxGrid.Item>
+        </FlexboxGrid>
+      </PanelBottomControl>
+    </PanelContainer>
   );
 };
 

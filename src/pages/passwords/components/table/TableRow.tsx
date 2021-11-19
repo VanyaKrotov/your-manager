@@ -1,76 +1,120 @@
 import { FC, useCallback, useState } from "react";
-import { ButtonToolbar, Checkbox, IconButton, Message, toaster } from "rsuite";
+import {
+  ButtonToolbar,
+  Checkbox,
+  Dropdown,
+  IconButton,
+  Message,
+  toaster,
+} from "rsuite";
 import copy from "copy-to-clipboard";
+import { observer } from "mobx-react";
 
-import { TableRow as TableRowContainer, TableCol } from "./styles";
+import { decryptPassword } from "helpers/passwords";
+
+import { user, passwords } from "store";
 import { Password } from "types/passwords";
+
+import {
+  TableRow as TableRowContainer,
+  TableCol,
+  StopPropTableCol,
+} from "./styles";
 
 import CopyField from "../CopyField";
 
 import MoreIcon from "icons/more.svg";
 import LockIcon from "icons/lock.svg";
 import UnLockIcon from "icons/unlock.svg";
-import { modals, user } from "store";
-import { ModalType } from "store/modals/types";
-import { encryptPassword } from "helpers/passwords";
+import { useTranslation } from "react-i18next";
 
 interface TableRowProps {
   data: Password;
+  selected: boolean;
+  onClick: () => void;
+  onEdit: () => void;
+  onSelect: (id: number) => void;
 }
 
-const TableRow: FC<TableRowProps> = ({ data }) => {
+const TableRow: FC<TableRowProps> = ({
+  data,
+  selected,
+  onClick,
+  onSelect,
+  onEdit,
+}) => {
   const [show, setShow] = useState("");
-  const { title, domain, groupId, username, password } = data;
+
+  const { id, title, domain, groupId, username, password } = data;
+  const { groupsMap } = passwords;
+
+  const { t } = useTranslation();
 
   const onOpenPassword = useCallback(async () => {
-    try {
-      let key = user.sessionPrivateKey;
-      if (!key) {
-        key = await new Promise((resolve, reject) =>
-          modals.open(ModalType.PrivateKeyConfirm, {
-            resolve,
-            reject,
-          })
-        );
-      }
+    if (show) {
+      return setShow("");
+    }
 
-      setShow(encryptPassword(password, key!));
-    } catch (error) {}
-  }, [password]);
+    user.getPrivateKey().then((key) => setShow(decryptPassword(password, key)));
+  }, [password, show]);
 
   const onCopy = useCallback(
     (fieldName: keyof Password) => () => {
       copy(String(data[fieldName])) &&
-        toaster.push(<Message type="success">{fieldName} copied!</Message>);
+        toaster.push(
+          <Message type="success">
+            {t("template copied", { fieldName })}
+          </Message>
+        );
     },
-    [data]
+    [data, t]
   );
 
-  const onCopyPassword = show ? () => copy(show) : undefined;
+  const onCopyPassword = useCallback(() => {
+    copy(show) &&
+      toaster.push(
+        <Message type="success">
+          {t("template copied", { fieldName: "password" })}
+        </Message>
+      );
+  }, [show, t]);
 
   return (
-    <TableRowContainer>
-      <TableCol xs={1} sm={1} md={1} lg={1} data-padding className="flex-block">
-        <Checkbox className="custom-checkbox" />
-      </TableCol>
+    <TableRowContainer onClick={onClick}>
+      <StopPropTableCol
+        xs={1}
+        sm={1}
+        md={1}
+        lg={1}
+        data-padding
+        className="flex-block"
+      >
+        <Checkbox
+          className="custom-checkbox"
+          checked={selected}
+          onChange={() => onSelect(id)}
+        />
+      </StopPropTableCol>
       <TableCol xs={4} sm={4} md={4} lg={4} data-padding>
         {title}
       </TableCol>
-      <TableCol xs={4} sm={4} md={4} lg={5}>
+      <StopPropTableCol xs={4} sm={4} md={4} lg={5}>
         <CopyField onCopy={onCopy("username")}>{username}</CopyField>
-      </TableCol>
-      <TableCol xs={3} sm={4} md={4} lg={4}>
+      </StopPropTableCol>
+      <StopPropTableCol xs={3} sm={4} md={4} lg={4}>
         <span className="domain">
           <CopyField onCopy={onCopy("domain")}>{domain}</CopyField>
         </span>
-      </TableCol>
-      <TableCol xs={4} sm={4} md={5} lg={5}>
-        <CopyField onCopy={onCopyPassword}>{show || "********"}</CopyField>
-      </TableCol>
-      <TableCol xs={4} sm={3} md={3} lg={3} data-padding>
-        {groupId}
-      </TableCol>
-      <TableCol xs={4} sm={4} md={3} lg={2}>
+      </StopPropTableCol>
+      <StopPropTableCol xs={4} sm={4} md={5} lg={5}>
+        <CopyField onCopy={show ? onCopyPassword : undefined}>
+          {show || "********"}
+        </CopyField>
+      </StopPropTableCol>
+      <StopPropTableCol xs={4} sm={3} md={3} lg={3} data-padding>
+        <time>{groupsMap[groupId]?.title}</time>
+      </StopPropTableCol>
+      <StopPropTableCol xs={4} sm={4} md={3} lg={2}>
         <ButtonToolbar className="align-right">
           <IconButton
             icon={show ? <LockIcon /> : <UnLockIcon />}
@@ -78,11 +122,30 @@ const TableRow: FC<TableRowProps> = ({ data }) => {
             onClick={onOpenPassword}
             appearance="subtle"
           />
-          <IconButton icon={<MoreIcon />} size="sm" appearance="subtle" />
+          <Dropdown
+            renderToggle={(props, ref) => (
+              <IconButton
+                {...props}
+                ref={ref}
+                icon={<MoreIcon />}
+                size="sm"
+                appearance="subtle"
+              />
+            )}
+            placement="bottomEnd"
+          >
+            <Dropdown.Item onClick={onEdit}>{t("Edit")}</Dropdown.Item>
+            <Dropdown.Item
+              className="delete-button"
+              onClick={() => passwords.removePassword(id)}
+            >
+              {t("Delete")}
+            </Dropdown.Item>
+          </Dropdown>
         </ButtonToolbar>
-      </TableCol>
+      </StopPropTableCol>
     </TableRowContainer>
   );
 };
 
-export default TableRow;
+export default observer(TableRow);

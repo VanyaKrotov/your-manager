@@ -1,5 +1,4 @@
 import { FC, useCallback, useMemo } from "react";
-import { Divider } from "rsuite";
 import { observer } from "mobx-react";
 import { useTranslation } from "react-i18next";
 
@@ -10,7 +9,6 @@ import { TodoDefaultListGroup } from "enums/todo-list";
 import ContextMenu from "components/context-menu";
 
 import {
-  NavContainer,
   ListTasksContainer,
   TopListTasksContainer,
   StyledTodoList,
@@ -23,6 +21,7 @@ import TimeIcon from "@rsuite/icons/Time";
 import TrashIcon from "@rsuite/icons/Trash";
 import AttachmentIcon from "@rsuite/icons/Attachment";
 import ListIcon from "@rsuite/icons/List";
+import { PanelContainer } from "components/panels";
 
 interface TodoGroupControlProps {
   activeKey: string | number;
@@ -66,7 +65,7 @@ const TodoGroupControl: FC<TodoGroupControlProps> = ({
   );
 
   return (
-    <NavContainer>
+    <PanelContainer data-layer="2">
       <ContextMenu id="group-context" items={contextMenuItems} />
       <TopListTasksContainer>
         <StyledTodoList>
@@ -112,8 +111,6 @@ const TodoGroupControl: FC<TodoGroupControlProps> = ({
         </StyledTodoList>
       </TopListTasksContainer>
 
-      <Divider className="reset-margin" />
-
       <ListTasksContainer>
         <StyledTodoList
           onAddItem={onAddGroup}
@@ -140,7 +137,7 @@ const TodoGroupControl: FC<TodoGroupControlProps> = ({
           ))}
         </StyledTodoList>
       </ListTasksContainer>
-    </NavContainer>
+    </PanelContainer>
   );
 };
 

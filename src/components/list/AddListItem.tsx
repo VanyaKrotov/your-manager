@@ -20,14 +20,11 @@ const AddListItem: FC<AddListItemProps> = ({
 
   const onRemoveFocused = useCallback(() => setFocused(false), [setFocused]);
 
-  const onPressEnterHandler = useCallback(
-    (event) => {
-      if (onAddItem(value)) {
-        setValue("");
-      }
-    },
-    [onAddItem, value]
-  );
+  const onPressEnterHandler = useCallback(() => {
+    if (onAddItem(value)) {
+      setValue("");
+    }
+  }, [onAddItem, value]);
 
   const isShowInput = Boolean(value || focused);
 
@@ -36,6 +33,7 @@ const AddListItem: FC<AddListItemProps> = ({
       onClick={() => setFocused(true)}
       data-focused={focused}
       className="add-control"
+      data-active={focused}
     >
       <FlexboxGrid align="middle" justify="space-between">
         <FlexboxGrid.Item>

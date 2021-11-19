@@ -1,36 +1,35 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback } from "react";
 import {
   Header as RHeader,
   FlexboxGrid,
   Button,
   Input,
   InputGroup,
-  IconButton,
 } from "rsuite";
 import { useTranslation } from "react-i18next";
 
 import { PasswordsFilter, UsePasswordsFilterChange } from "../types";
 
+import SearchSettings from "./SearchSettings";
+
 import SearchIcon from "icons/search.svg";
-import SearchOptionsIcon from "icons/options.svg";
-import AddPassword from "./AddPassword";
 
 interface HeaderProps {
   filter: PasswordsFilter;
   changeFilter: UsePasswordsFilterChange;
+  onOpenCreate: () => void;
 }
 
-const Header: FC<HeaderProps> = ({}) => {
-  const [openCreate, setOpenCreate] = useState(false);
+const Header: FC<HeaderProps> = ({ filter, changeFilter, onOpenCreate }) => {
   const { t } = useTranslation();
 
-  const onOpenCreate = useCallback(() => setOpenCreate(true), []);
-  const onCloseCreate = useCallback(() => setOpenCreate(false), []);
+  const onChangeQuery = useCallback(
+    (query) => changeFilter({ query }),
+    [changeFilter]
+  );
 
   return (
     <RHeader className="m-b-20">
-      <AddPassword open={openCreate} onClose={onCloseCreate} />
-
       <FlexboxGrid align="middle" justify="space-between">
         <FlexboxGrid.Item>
           <h3>{t("Passwords")}</h3>
@@ -43,11 +42,16 @@ const Header: FC<HeaderProps> = ({}) => {
                 <InputGroup.Addon>
                   <SearchIcon />
                 </InputGroup.Addon>
-                <Input placeholder="Typing for the search" />
+                <Input
+                  style={{ width: 210 }}
+                  value={filter.query}
+                  placeholder={t("Start typing for the search")}
+                  onChange={onChangeQuery}
+                />
               </InputGroup>
             </FlexboxGrid.Item>
             <FlexboxGrid.Item className="m-r-10">
-              <IconButton icon={<SearchOptionsIcon />} />
+              <SearchSettings />
             </FlexboxGrid.Item>
             <FlexboxGrid.Item>
               <Button onClick={onOpenCreate}>{t("Add item")}</Button>

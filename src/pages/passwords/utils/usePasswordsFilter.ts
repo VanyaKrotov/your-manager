@@ -12,7 +12,7 @@ const usePasswordsFilter = (): [PasswordsFilter, UsePasswordsFilterChange] => {
 
     return {
       active,
-      query,
+      query: String(query),
     } as PasswordsFilter;
   }, [search]);
 

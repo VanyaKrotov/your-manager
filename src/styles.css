@@ -26,6 +26,19 @@ body.rs-theme-dark {
   --ym-list-bg-hover: #292d33;
   --ym-list-bg-active: #282b2e;
   --ym-table-header: rgba(60, 63, 67, 0.2);
+
+  --ym-title-bar-bg: #292d33;
+
+  --ym-panel-1: #1a1d24;
+  --ym-panel-2: #22262f;
+
+  --ym-bg-50: #0a0b0d;
+  --ym-bg-100: #25272e;
+  --ym-bg-200: #2a2f3b;
+
+  --ym-primary-light: #169de026;
+  --ym-primary-medium: #169de042;
+  --ym-primary-high: #169de0a6;
 }
 
 body.rs-theme-light {
@@ -33,8 +46,21 @@ body.rs-theme-light {
   --ym-list-bg-hover: #dddddd;
   --ym-list-bg-active: #dbdbdb;
 
+  --ym-title-bar-bg: #efefef;
   /* TODO */
   --ym-table-header: rgba(60, 63, 67, 0.1);
+
+  --ym-panel-1: #f7f7fa;
+
+  /* TODO */
+  --ym-panel-2: #9aa3b6;
+  --ym-bg-50: #0a0b0d;
+  --ym-bg-100: #25272e;
+  --ym-bg-200: #25272e;
+
+  --ym-primary-light: #169de026;
+  --ym-primary-medium: #169de042;
+  --ym-primary-high: #169de0a6;
 }
 
 /* TODO */
@@ -240,8 +266,8 @@ time {
   border-radius: 5px;
 }
 
-.rs-sidenav-subtle .rs-dropdown.rs-dropdown-selected-within .rs-dropdown-toggle,
-.rs-sidenav-subtle .rs-sidenav-item.rs-sidenav-item-active::before {
+.rs-sidenav .rs-dropdown.rs-dropdown-selected-within .rs-dropdown-toggle,
+.rs-sidenav .rs-sidenav-item.rs-sidenav-item-active::before {
   content: " ";
   position: absolute;
   top: 11%;
@@ -254,11 +280,12 @@ time {
   box-shadow: var(--rs-state-focus-shadow);
 }
 
-.rs-sidenav-subtle .rs-dropdown .rs-dropdown-toggle:focus,
-.rs-sidenav-subtle .rs-dropdown .rs-dropdown-toggle:hover,
-.rs-sidenav-subtle .rs-sidenav-item:focus,
-.rs-sidenav-subtle .rs-sidenav-item:hover {
+.rs-sidenav .rs-dropdown .rs-dropdown-toggle:focus,
+.rs-sidenav .rs-dropdown .rs-dropdown-toggle:hover,
+.rs-sidenav .rs-sidenav-item:focus,
+.rs-sidenav .rs-sidenav-item:hover {
   box-shadow: none;
+  background-color: initial;
 }
 .rs-input-group:not(.rs-input-group-inside)
   .rs-auto-complete:first-child
@@ -272,6 +299,10 @@ time {
 .rs-input-group:not(.rs-input-group-inside) > :first-child {
   border-bottom-left-radius: 4px;
   border-top-left-radius: 4px;
+}
+
+.m-r--10 {
+  margin-right: -10px;
 }
 
 .m-20 {
@@ -312,4 +343,9 @@ time {
   left: 0;
   bottom: 0;
   right: 0;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 20px;
 }

@@ -16,13 +16,14 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="title-bar"></div>
     <div id="root"></div>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", async () => {
           try {
             const registration = await navigator.serviceWorker.register(
-              `/your-manager/service-worker.js`
+              `/service-worker.js`
             );
 
             console.log(
@@ -37,5 +38,7 @@
         console.log("service worker is not supported");
       }
     </script>
+
+    <script defer src="%PUBLIC_URL%/application.js"></script>
   </body>
 </html>

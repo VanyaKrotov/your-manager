@@ -8,15 +8,20 @@ import { DEFAULT_USERNAME, DEFAULT_USER_ID } from "./constants";
 import UserModel from "models/user/UserModel";
 import { RegistrationFormValue } from "pages/user/forms/registration";
 import { modelInitRunner } from "models";
+import ModalsStore from "store/modals";
+import { ModalType } from "store/modals/types";
 
 class UserStore {
+  private readonly modalStore: ModalsStore;
   public isLoaded = false;
   public profiles: User[] = [];
   public sessionPrivateKey: string | null = null;
   public data: User | null = null;
 
-  constructor(userId: number) {
+  constructor(userId: number, modalStore: ModalsStore) {
     makeAutoObservable(this);
+
+    this.modalStore = modalStore;
 
     this.init(userId);
   }
@@ -90,6 +95,19 @@ class UserStore {
     await this.loadUsers();
 
     return result;
+  }
+
+  public async getPrivateKey(): Promise<string> {
+    if (this.sessionPrivateKey) {
+      return this.sessionPrivateKey;
+    }
+
+    return new Promise((resolve, reject) =>
+      this.modalStore.open(ModalType.PrivateKeyConfirm, {
+        resolve,
+        reject,
+      })
+    );
   }
 }
 

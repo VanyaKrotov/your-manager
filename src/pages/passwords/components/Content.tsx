@@ -1,25 +1,36 @@
-import { FC, useMemo, useState } from "react";
-import { Content as RContent, FlexboxGrid } from "rsuite";
+import { FC, useCallback } from "react";
+import { Content as RContent } from "rsuite";
+import { Password } from "types/passwords";
 
 import { PasswordsFilter, UsePasswordsFilterChange } from "../types";
 import { Table } from "./table";
 
 interface ContentProps {
   filter: PasswordsFilter;
+  items: Password[];
   changeFilter: UsePasswordsFilterChange;
+  onEdit: (value: number) => void;
 }
 
-const Content: FC<ContentProps> = ({ filter: { active } }) => {
-  const [first, second] = useMemo(() => (active ? [18, 6] : [24, 0]), [active]);
+const Content: FC<ContentProps> = ({
+  filter: { active },
+  changeFilter,
+  items,
+  onEdit,
+}) => {
+  const changeActiveRow = useCallback(
+    (active) => changeFilter({ active }),
+    [changeFilter]
+  );
 
   return (
     <RContent>
-      <FlexboxGrid>
-        <FlexboxGrid.Item colspan={first}>
-          <Table />
-        </FlexboxGrid.Item>
-        <FlexboxGrid.Item colspan={second}></FlexboxGrid.Item>
-      </FlexboxGrid>
+      <Table
+        changeActiveRow={changeActiveRow}
+        active={active}
+        items={items}
+        onEdit={onEdit}
+      />
     </RContent>
   );
 };
