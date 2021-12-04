@@ -26,7 +26,7 @@ export interface TodoItem {
   groupId: number;
   userId: number;
   orderIndex: number | null;
-  steps: TodoStep[];
+  steps?: TodoStep[];
   dateCreate: number;
   priority: boolean;
   lastChanged: number | null;

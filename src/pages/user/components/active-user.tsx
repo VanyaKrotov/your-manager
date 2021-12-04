@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { createUsernameSymbols } from "helpers/user";
-import { FC, useCallback, useState } from "react";
+import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Avatar, Button, Panel } from "rsuite";
 
@@ -24,24 +24,21 @@ const CurrentUser: FC<CurrentUserProps> = ({ user, onClosePage }) => {
 
   const { t } = useTranslation();
 
-  const onSubmitForm = useCallback(
-    async (password) => {
-      const result = await userStore.login(id, password);
+  const onSubmitForm = async (password: string) => {
+    const result = await userStore.login(id, password);
 
-      if (!result) {
-        setError(t("Login failed"));
+    if (!result) {
+      setError(t("Login failed"));
 
-        return false;
-      }
+      return false;
+    }
 
-      onClosePage();
+    onClosePage();
 
-      return true;
-    },
-    [onClosePage, id, t]
-  );
+    return true;
+  };
 
-  const onLoginButton = useCallback(() => onSubmitForm(""), [onSubmitForm]);
+  const onLoginButton = () => onSubmitForm("");
 
   return (
     <Panel>

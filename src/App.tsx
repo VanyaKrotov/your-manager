@@ -1,4 +1,3 @@
-import { useCallback, useMemo } from "react";
 import { Container, Nav, Sidenav, CustomProvider, Dropdown } from "rsuite";
 import { ruRU, enUS } from "rsuite/locales";
 import { observer } from "mobx-react-lite";
@@ -41,7 +40,7 @@ const App = () => {
   const { pathname } = useLocation();
   const { t } = useTranslation();
 
-  const onSelectOption = useCallback((key?: string) => {
+  const onSelectOption = (key?: string) => {
     if (!key) {
       return;
     }
@@ -53,12 +52,10 @@ const App = () => {
     if ([Language.Ru, Language.EnUS].includes(key as Language)) {
       pageView.changeLanguage(key as Language);
     }
-  }, []);
+  };
 
-  const locale = useMemo(
-    () => (language === Language.Ru ? ruRU : enUS),
-    [language]
-  );
+  const locale = language === Language.Ru ? ruRU : enUS;
+  console.log(user);
 
   return (
     <CustomProvider theme={theme} locale={locale}>

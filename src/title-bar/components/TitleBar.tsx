@@ -17,7 +17,7 @@ import MinimizeIcon from "icons/title-bar/minimize.svg";
 import MaximizeIcon from "icons/title-bar/maximize.svg";
 import RestoreIcon from "icons/title-bar/restore.svg";
 import CloseIcon from "icons/title-bar/close.svg";
-import LogoIcon from "icons/logo.svg";
+import LogoIcon from "icons/logo24.svg";
 
 const TitleBar = () => {
   const [title, setTitle] = useState(document.title);

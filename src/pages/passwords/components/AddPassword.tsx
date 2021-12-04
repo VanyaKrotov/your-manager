@@ -1,10 +1,10 @@
-import { decryptPassword, encryptPassword } from "helpers/passwords";
+import { FC, useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal } from "rsuite";
 import { passwords, user } from "store";
 
+import { decryptPassword, encryptPassword } from "helpers/passwords";
 import { PasswordForm } from "../forms";
 import { PasswordFormValue } from "../forms/PasswordForm";
 
@@ -27,30 +27,27 @@ const AddPassword: FC<CreatePasswordProps> = ({ open, onClose }) => {
     [list, open]
   );
 
-  const onSubmit = useCallback(
-    async (values) => {
-      try {
-        const key = await user.getPrivateKey();
+  const onSubmit = async (values: PasswordFormValue) => {
+    try {
+      const key = await user.getPrivateKey();
 
-        const password = encryptPassword(values.password, key);
+      const password = encryptPassword(values.password, key);
 
-        const savedValues = Object.assign(values, {
-          password,
-        });
+      const savedValues = Object.assign(values, {
+        password,
+      });
 
-        if (currentItem) {
-          await passwords.editPassword(savedValues);
-        } else {
-          await passwords.addPassword(savedValues);
-        }
-
-        onClose();
-      } catch (error) {
-        console.log(error);
+      if (currentItem) {
+        await passwords.editPassword(savedValues as any);
+      } else {
+        await passwords.addPassword(savedValues);
       }
-    },
-    [onClose, currentItem]
-  );
+
+      onClose();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (!currentItem) {

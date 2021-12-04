@@ -1,29 +1,44 @@
 import { makeAutoObservable } from "mobx";
+import {
+  ref,
+  set,
+  onValue,
+  update,
+  DatabaseReference,
+  child,
+} from "firebase/database";
+import { SHA256 } from "crypto-js";
+
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 import { createUsernameSymbols } from "helpers/user";
 
 import { User } from "types/user";
 
 import { DEFAULT_USERNAME, DEFAULT_USER_ID } from "./constants";
-import UserModel from "models/user/UserModel";
 import { RegistrationFormValue } from "pages/user/forms/registration";
-import { modelInitRunner } from "models";
 import ModalsStore from "store/modals";
 import { ModalType } from "store/modals/types";
+import { auth, db } from "services/firebase";
+import { mapFirebaseUserToUser } from "helpers/mappers";
 
 class UserStore {
-  private readonly modalStore: ModalsStore;
+  private ref: DatabaseReference;
+  public unSubscribeUser: () => void = () => {};
   public isLoaded = false;
   public profiles: User[] = [];
   public sessionPrivateKey: string | null = null;
   public data: User | null = null;
 
-  constructor(userId: number, modalStore: ModalsStore) {
+  constructor(private readonly modalStore: ModalsStore) {
     makeAutoObservable(this);
 
-    this.modalStore = modalStore;
+    this.ref = ref(db, "users/");
 
-    this.init(userId);
+    this.init();
   }
 
   public get authorized(): boolean {
@@ -50,35 +65,81 @@ class UserStore {
     this.sessionPrivateKey = key;
   }
 
-  private async loadUsers() {
-    this.profiles = await UserModel.selectAllUsers();
-    this.isLoaded = true;
-  }
+  public getUserProfiles(): User[] {
+    const profilesRawData = localStorage.getItem("savedProfiles");
 
-  public async init(userId: number) {
-    await modelInitRunner(UserModel);
-
-    await this.loadUsers();
-  }
-
-  public async login(userId: number, password?: string): Promise<User | null> {
-    const userIndex = this.profiles.findIndex(({ id }) => id === userId)!;
-    if (!password && !this.profiles[userIndex].hasPassword) {
-      this.data = this.profiles[userIndex];
-
-      return this.data;
+    if (!profilesRawData) {
+      return [];
     }
 
-    const authResult = await UserModel.authenticate(userId, password!);
+    return JSON.parse(profilesRawData);
+  }
 
-    if (!authResult) {
+  private addUserProfile(user: User): User[] {
+    const currentProfiles = this.getUserProfiles();
+
+    currentProfiles.push(user);
+
+    localStorage.setItem("savedProfiles", JSON.stringify(currentProfiles));
+
+    return currentProfiles;
+  }
+
+  public async init() {
+    this.profiles = this.getUserProfiles();
+  }
+
+  public subscribeUser(userId: number | string) {
+    this.unSubscribeUser();
+
+    this.unSubscribeUser = onValue(
+      child(this.ref, String(userId)),
+      (snapshot) => {
+        if (snapshot.exists() && this.data) {
+          const userInfo = snapshot.val();
+
+          this.data = Object.assign(this.data, userInfo);
+        }
+      }
+    );
+  }
+
+  public async loginWithEmail(
+    username: string,
+    password: string
+  ): Promise<User | null> {
+    try {
+      const result = await signInWithEmailAndPassword(auth, username, password);
+      const user = mapFirebaseUserToUser(result.user);
+
+      await update(child(this.ref, String(user.id)), {
+        lastLogin: new Date().getTime(),
+      });
+
+      this.subscribeUser(user.id);
+
+      if (!this.profiles.find(({ id }) => user.id === id)) {
+        this.profiles = this.addUserProfile(user);
+      }
+
+      this.data = user;
+
+      return user;
+    } catch (error) {
+      console.error(error);
+    }
+
+    return null;
+  }
+
+  public async login(userId: number, password: string): Promise<User | null> {
+    const user = this.profiles.find(({ id }) => id === userId);
+
+    if (!user) {
       return null;
     }
 
-    this.data = authResult;
-    this.profiles[userIndex] = authResult;
-
-    return authResult;
+    return this.loginWithEmail(user.username, password);
   }
 
   public async addUser({
@@ -86,15 +147,32 @@ class UserStore {
     password,
     secretKey,
   }: RegistrationFormValue): Promise<User | null> {
-    const result = await UserModel.add({
-      username,
-      password,
-      privateKey: secretKey,
-    });
+    try {
+      const result = await createUserWithEmailAndPassword(
+        auth,
+        username,
+        password
+      );
 
-    await this.loadUsers();
+      const user = mapFirebaseUserToUser(result.user, {
+        privateKey: SHA256(secretKey).toString(),
+      });
 
-    return result;
+      const { privateKey } = user;
+
+      await set(ref(db, `users/${user.id}`), {
+        privateKey,
+        username: user.username,
+      });
+
+      this.profiles = this.addUserProfile(user);
+
+      return user;
+    } catch (error) {
+      console.error(error);
+    }
+
+    return null;
   }
 
   public async getPrivateKey(): Promise<string> {

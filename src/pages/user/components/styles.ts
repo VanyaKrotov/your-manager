@@ -30,7 +30,7 @@ export const StyledListItem = styled(List.Item)`
 `;
 
 export const Section = styled.section`
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `;
 
 export const ErrorMessage = styled.p`

@@ -42,7 +42,7 @@ class PageViewStore {
     makeAutoObservable(this);
 
     const savedSettingsJson = localStorage.getItem("page-settings");
-
+    console.log(savedSettingsJson);
     window.addEventListener("unload", () => {
       const { pathname, search } = window.location;
       console.log(JSON.parse(JSON.stringify(window.location)));
@@ -68,7 +68,6 @@ class PageViewStore {
     }
 
     const savedSettings = JSON.parse(savedSettingsJson);
-
     for (const key in savedSettings) {
       if (key in this) {
         (this as any)[key] = savedSettings[key];

@@ -2,7 +2,6 @@ import { FC, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, ButtonToolbar, Form, Input, Schema } from "rsuite";
 import { i18n } from "store";
-import { DEFAULT_USERNAME } from "store/user/constants";
 
 const { Model, Types } = Schema;
 
@@ -18,7 +17,7 @@ export interface RegistrationFormValue {
 }
 
 const DEFAULT_VALUE = {
-  username: DEFAULT_USERNAME,
+  username: "",
   password: "",
   confirmPassword: "",
   secretKey: "",
@@ -67,14 +66,13 @@ const RegistrationForm: FC<RegistrationFormProps> = ({ onSubmit }) => {
       formDefaultValue={DEFAULT_VALUE}
       onSubmit={onSubmitHandler}
       model={model}
-      checkTrigger="blur"
       fluid
     >
       <Form.Group>
         <Form.ControlLabel>{t("Username")}</Form.ControlLabel>
         <Form.Control<typeof Input>
           name="username"
-          placeholder={DEFAULT_USERNAME}
+          placeholder={t("Username")}
         />
       </Form.Group>
 

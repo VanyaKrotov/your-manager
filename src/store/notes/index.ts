@@ -1,33 +1,44 @@
 import { format, isToday, isYesterday } from "date-fns";
 import { makeAutoObservable } from "mobx";
+import {
+  child,
+  DatabaseReference,
+  ref,
+  update,
+  onValue,
+  set,
+  remove,
+} from "firebase/database";
 
-import { modelInitRunner } from "models";
-
-import { NoteType } from "enums/notes";
+import { NoteType, SubType } from "enums/notes";
 import { Note } from "types/notes";
-import NoteModel from "models/note/NoteModel";
 
 import { i18n, pageView } from "..";
+import { db } from "services/firebase";
 
 class NotesStore {
+  private ref: DatabaseReference;
+  private unsubscribe: () => void = () => {};
   public rawItems: Note[] = [];
 
   constructor(userId: number) {
     makeAutoObservable(this);
 
+    this.ref = ref(db, `notes/${userId}`);
+
     this.init(userId);
   }
 
   private async init(userId: number) {
-    await modelInitRunner(NoteModel);
+    this.unsubscribe = onValue(this.ref, (snapshot) => {
+      this.rawItems = Object.values(snapshot.val() || {});
 
-    await this.loadItems(userId);
+      if (this.todayItem) {
+        return;
+      }
 
-    if (this.todayItem) {
-      return;
-    }
-
-    this.addNote({ userId, title: null, type: NoteType.time });
+      this.addNote({ userId, title: null, type: NoteType.time });
+    });
   }
 
   public get items(): Note[] {
@@ -84,42 +95,33 @@ class NotesStore {
     );
   }
 
-  public async loadItems(userId: number) {
-    this.rawItems = await NoteModel.selectAllByUserId(userId);
-  }
-
   public async addNote(note: Pick<Note, "title" | "userId" | "type">) {
-    const addedNote = await NoteModel.add(note);
+    const currentTime = new Date().getTime();
+    const newNote = {
+      id: currentTime,
+      content: "",
+      dateCreated: currentTime,
+      priority: false,
+      subType: SubType.Rich,
+      ...note,
+    };
 
-    if (addedNote) {
-      this.rawItems.push(addedNote);
-    }
+    await set(child(this.ref, String(currentTime)), newNote);
 
-    return addedNote;
+    return newNote;
   }
 
   public async updateNote(
     noteId: number,
     note: Partial<Omit<Note, "id" | "userId" | "dateCreated">>
   ) {
-    const item = await NoteModel.update(
-      noteId,
-      Object.assign(this.notesMap[noteId], note)
-    );
+    const updateNote = Object.assign(this.notesMap[noteId], note);
 
-    if (item) {
-      const index = this.rawItems.findIndex(({ id }) => id === noteId);
-
-      this.rawItems[index] = item;
-    }
+    await update(child(this.ref, String(noteId)), updateNote);
   }
 
   public async deleteNote(noteId: number) {
-    const isDeleted = await NoteModel.delete(noteId);
-
-    if (isDeleted) {
-      this.rawItems = this.rawItems.filter(({ id }) => id !== noteId);
-    }
+    remove(child(this.ref, String(noteId)));
   }
 
   public async changePriority(noteId: number) {

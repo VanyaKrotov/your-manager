@@ -1,19 +1,36 @@
 import { makeAutoObservable } from "mobx";
-import { modelInitRunner } from "models";
-import PasswordGroupModel from "models/password/PasswordGroupModel";
-import PasswordModel from "models/password/PasswordModel";
+import {
+  ref,
+  update,
+  onValue,
+  child,
+  remove,
+  DatabaseReference,
+} from "firebase/database";
+
 import { PasswordFormValue } from "pages/passwords/forms/PasswordForm";
 
 import { Password, PasswordGroup } from "types/passwords";
+import { db } from "services/firebase";
 
 class PasswordStore {
+  private passwordsRef: DatabaseReference;
+  private passwordGroupsRef: DatabaseReference;
   public list: Password[] = [];
   public groups: PasswordGroup[] = [];
 
   constructor(userId: number) {
     makeAutoObservable(this);
 
-    this.init(userId);
+    this.passwordGroupsRef = ref(db, `passwordsGroups/${userId}`);
+    this.passwordsRef = ref(db, `passwords/${userId}`);
+
+    this.init();
+  }
+
+  public setRefsForUser(userId: string | number) {
+    this.passwordGroupsRef = ref(db, `passwordsGroups/${userId}`);
+    this.passwordsRef = ref(db, `passwords/${userId}`);
   }
 
   public get pickerGroups() {
@@ -31,56 +48,53 @@ class PasswordStore {
     return this.list;
   }
 
-  private async init(userId: number) {
-    await modelInitRunner(PasswordModel);
-    await modelInitRunner(PasswordGroupModel);
+  private async init() {
+    const unSubGroups = onValue(this.passwordGroupsRef, (snapshot) => {
+      this.groups = Object.values(snapshot.val() || {});
+    });
 
-    this.groups = await PasswordGroupModel.selectAllByUserId(userId);
-    this.list = await PasswordModel.selectAllByUserId(userId);
+    const unSubPasswords = onValue(this.passwordsRef, (snapshot) => {
+      this.list = Object.values(snapshot.val() || {});
+    });
+
+    return () => {
+      unSubGroups();
+      unSubPasswords();
+    };
   }
 
   public async addPassword(values: PasswordFormValue) {
-    const result = await PasswordModel.add(values);
+    const createdTime = new Date().getTime();
+    const newPassword = {
+      ...values,
+      id: createdTime,
+      dateCreated: createdTime,
+    };
 
-    if (!result) {
-      throw Error("Error create password");
-    }
-
-    this.list = this.list.concat(result);
+    await update(child(this.passwordsRef, String(createdTime)), newPassword);
   }
 
   public async addGroup(values: Pick<PasswordGroup, "title" | "userId">) {
-    const group = await PasswordGroupModel.add(values);
+    const currentTime = new Date().getTime();
+    const group = { ...values, dateCreated: currentTime, id: currentTime };
 
-    if (group) {
-      this.groups = this.groups.concat(group);
-    }
+    await update(child(this.passwordGroupsRef, String(currentTime)), group);
 
     return group;
   }
 
   public async removePassword(id: number) {
-    const result = await PasswordModel.removeById(id);
-
-    if (result) {
-      this.list = this.list.filter(({ id: iId }) => iId !== id);
+    try {
+      await remove(child(this.passwordsRef, String(id)).ref);
+    } catch (error) {
+      return false;
     }
 
-    return result;
+    return true;
   }
 
   public async editPassword(values: PasswordFormValue & Pick<Password, "id">) {
-    const result = await PasswordModel.update(values);
-
-    if (!result) {
-      return null;
-    }
-
-    const index = this.list.findIndex(({ id }) => values.id === id);
-
-    this.list[index] = result;
-
-    this.list = [...this.list];
+    await update(child(this.passwordsRef, String(values.id)), values);
   }
 }
 

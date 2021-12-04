@@ -20,7 +20,7 @@ export const modals = new ModalsStore();
 
 const { currentUserId } = pageView;
 
-export const user = new UserStore(currentUserId, modals);
+export const user = new UserStore(modals);
 export const notes = new NotesStore(currentUserId);
 export const passwords = new PasswordStore(currentUserId);
 export const todoList = new TodoListStore(currentUserId);

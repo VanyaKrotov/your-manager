@@ -72,8 +72,14 @@ const RightSide: FC<RightSideProps> = ({
     [selectedId, todoMap]
   );
 
-  const { title, state, priority, steps, lastChanged, description } =
-    currentItem!;
+  const {
+    title,
+    state,
+    priority,
+    steps = [],
+    lastChanged,
+    description,
+  } = currentItem!;
   const { t } = useTranslation();
 
   const onUpdateTitle = useCallback(
@@ -224,11 +230,7 @@ const RightSide: FC<RightSideProps> = ({
       </ScrollContainer>
 
       <PanelBottomControl>
-        <FlexboxGrid
-          className="p-10"
-          align="middle"
-          justify="space-between"
-        >
+        <FlexboxGrid className="p-10" align="middle" justify="space-between">
           <FlexboxGrid.Item>
             <IconButton
               icon={<ArrowRightIcon />}

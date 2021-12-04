@@ -1,25 +1,37 @@
 import { isToday } from "date-fns";
 import { makeAutoObservable } from "mobx";
+import {
+  child,
+  DatabaseReference,
+  ref,
+  update,
+  onValue,
+  set,
+  remove,
+} from "firebase/database";
 
 import { TodoGroup, TodoItem } from "types/todo-list";
 import { TodoDefaultListGroup } from "enums/todo-list";
 
-import TodoGroupModel from "models/todo/TodoGroupModel";
-import TodoItemModel from "models/todo/TodoIteModel";
-import { modelInitRunner } from "models";
+import { db } from "services/firebase";
 
 interface ItemsMap {
   [key: string | number]: TodoItem[];
 }
 
 class TodoListStore {
+  private groupsRef: DatabaseReference;
+  private itemsRef: DatabaseReference;
   public groups: TodoGroup[] = [];
   public items: TodoItem[] = [];
 
   constructor(userId: number) {
     makeAutoObservable(this);
 
-    this.init(userId);
+    this.itemsRef = ref(db, `todos/${userId}`);
+    this.groupsRef = ref(db, `todosGroups/${userId}`);
+
+    this.init();
   }
 
   public get todoMap(): Record<number, TodoItem> {
@@ -54,61 +66,62 @@ class TodoListStore {
     return this.itemsMapForGroups[groupId]?.length || 0;
   }
 
-  private async init(userId: number) {
-    await modelInitRunner(TodoGroupModel);
-    await modelInitRunner(TodoItemModel);
+  private async init() {
+    const unsubscribeGroups = onValue(this.groupsRef, (snapshot) => {
+      this.groups = Object.values(snapshot.val() || {});
+    });
 
-    this.loadData(userId);
-  }
+    const unsubscribeItems = onValue(this.itemsRef, (snapshot) => {
+      this.items = Object.values(snapshot.val() || {});
+    });
 
-  public async loadData(userId: number) {
-    this.groups = await TodoGroupModel.selectAllForUserId(userId);
-    this.items = await TodoItemModel.selectAllForUserId(userId);
+    return () => {
+      unsubscribeGroups();
+      unsubscribeItems();
+    };
   }
 
   public async addGroup(group: Partial<Omit<TodoGroup, "id">>) {
-    const addedGroup = await TodoGroupModel.add(group);
+    const currentTime = new Date().getTime();
+    const newGroup = { ...group, id: currentTime };
 
-    this.groups.push(addedGroup);
+    await set(child(this.groupsRef, String(currentTime)), newGroup);
   }
 
   public async removeGroup(groupId: number) {
-    const removeSuccess = await TodoGroupModel.removeById(groupId);
-
-    if (removeSuccess) {
-      this.groups = this.groups.filter(({ id }) => id !== groupId);
-      this.items = this.items.filter(
-        ({ groupId: _groupId }) => _groupId !== groupId
-      );
-    }
+    await remove(child(this.groupsRef, String(groupId)));
   }
 
   public async removeItem(itemId: number) {
-    const removeSuccess = await TodoItemModel.removeById(itemId);
-
-    if (removeSuccess) {
-      this.items = this.items.filter(({ id }) => id !== itemId);
-    }
+    await remove(child(this.itemsRef, String(itemId)));
   }
 
   public async addItem(
     item: Omit<TodoItem, "id" | "lastChanged" | "dateCreate" | "priority">
   ) {
-    const addedItem = await TodoItemModel.add(item);
+    const currentTime = new Date().getTime();
+    const newItem = {
+      ...item,
+      steps: { ...(item.steps || []) },
+      id: currentTime,
+      dateCreate: currentTime,
+      priority: false,
+    };
 
-    this.items.push(addedItem);
+    await set(child(this.itemsRef, String(currentTime)), newItem);
 
-    return addedItem;
+    return newItem;
   }
 
-  public async updateItem(id: number, value: Partial<TodoItem>) {
-    const index = this.items.findIndex(({ id: _id }) => _id === id)!;
-    const updatedItem = await TodoItemModel.update({
-      ...this.items[index],
-      ...value,
-    });
+  public async updateItem(id: number, newValues: Partial<TodoItem>) {
+    const item = this.items.find(({ id: _id }) => _id === id)!;
+    const updatedItem = {
+      ...item,
+      steps: { ...item.steps },
+      ...newValues,
+    };
 
-    this.items[index] = updatedItem;
+    await update(child(this.itemsRef, String(id)), updatedItem);
   }
 }
 

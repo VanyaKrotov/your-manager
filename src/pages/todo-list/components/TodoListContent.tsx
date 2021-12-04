@@ -221,7 +221,7 @@ const TodoListContent: FC<TodoListContentProps> = ({
                 addPlaceholder={t("Add task")}
               >
                 {itemsMap[filter].map(
-                  ({ id, priority, title, state, steps }) => (
+                  ({ id, priority, title, state, steps = [] }) => (
                     <TodoListItem
                       active={selectedId === id}
                       onClick={() => setSelectedId(id)}
